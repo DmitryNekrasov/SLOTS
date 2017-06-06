@@ -6,7 +6,7 @@
 #include "videostream.h"
 #include "videostreamfromvideofile.h"
 
-static const std::string g_Path = "c:\\Users\\nekrasov\\Desktop\\The_Rolling_Stones.mp4";
+static const std::string g_Path = "/Users/ScanNorOne/Desktop/TrackingSamples/The_Rolling_Stones.mp4";
 
 static void foo() {
     std::unique_ptr<VideoStream> video_stream = std::make_unique<VideoStreamFromVideoFile>(g_Path);
