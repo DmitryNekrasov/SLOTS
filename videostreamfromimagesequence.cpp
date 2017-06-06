@@ -9,3 +9,7 @@ VideoStreamFromImageSequence::VideoStreamFromImageSequence(const std::string& pa
 cv::Mat& VideoStreamFromImageSequence::nextFrame() {
     // TODO
 }
+
+bool VideoStreamFromImageSequence::hasNext() {
+    // TODO
+}

@@ -20,6 +20,7 @@ public:
     virtual ~VideoStreamFromVideoFile() override = default;
 
     virtual cv::Mat& nextFrame() override;
+    virtual bool hasNext() override;
 
 private:
     cv::VideoCapture m_Capture;

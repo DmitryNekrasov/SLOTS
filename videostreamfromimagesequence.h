@@ -18,6 +18,7 @@ public:
     VideoStreamFromImageSequence& operator=(VideoStreamFromImageSequence&&) = delete;
 
     virtual cv::Mat& nextFrame() override;
+    virtual bool hasNext() override;
 
 private:
     using ImageSequenceT = std::vector<cv::Mat>;

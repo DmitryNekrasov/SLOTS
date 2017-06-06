@@ -10,7 +10,7 @@ static const std::string g_Path = "c:\\Users\\nekrasov\\Desktop\\The_Rolling_Sto
 
 static void foo() {
     std::unique_ptr<VideoStream> video_stream = std::make_unique<VideoStreamFromVideoFile>(g_Path);
-    while (true) {
+    while (video_stream->hasNext()) {
         auto frame = video_stream->nextFrame();
         cv::imshow("video", frame);
         if (cv::waitKey(1) == 27) {
