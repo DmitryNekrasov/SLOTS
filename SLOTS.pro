@@ -28,6 +28,7 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui
 
 INCLUDEPATH += /usr/local/Cellar/opencv3/3.2.0/include
+INCLUDEPATH += /usr/local/Cellar/boost/1.62.0/include
 
 LIBS += /usr/local/Cellar/opencv3/3.2.0/lib/libopencv_aruco.3.2.0.dylib
 LIBS += /usr/local/Cellar/opencv3/3.2.0/lib/libopencv_imgcodecs.3.2.0.dylib
@@ -152,3 +153,7 @@ LIBS += /usr/local/Cellar/opencv3/3.2.0/lib/libopencv_highgui.3.2.dylib
 LIBS += /usr/local/Cellar/opencv3/3.2.0/lib/libopencv_stereo.3.2.dylib
 LIBS += /usr/local/Cellar/opencv3/3.2.0/lib/libopencv_highgui.dylib
 LIBS += /usr/local/Cellar/opencv3/3.2.0/lib/libopencv_stereo.dylib
+
+LIBS += /usr/local/Cellar/boost/1.62.0/lib/libboost_filesystem.dylib
+LIBS += /usr/local/Cellar/boost/1.62.0/lib/libboost_serialization.dylib
+LIBS += /usr/local/Cellar/boost/1.62.0/lib/libboost_system.dylib

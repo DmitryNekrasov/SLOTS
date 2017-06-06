@@ -15,6 +15,6 @@ public:
 
     virtual ~VideoStream() = default;
 
-    virtual cv::Mat& nextFrame() = 0;
+    virtual cv::Mat nextFrame() = 0;
     virtual bool hasNext() = 0;
 };

@@ -7,10 +7,11 @@ VideoStreamFromVideoFile::VideoStreamFromVideoFile(const std::string& path)
 {
 }
 
-cv::Mat& VideoStreamFromVideoFile::nextFrame() {
-    bool is_correct = m_Capture.retrieve(m_Frame);
+cv::Mat VideoStreamFromVideoFile::nextFrame() {
+    cv::Mat frame;
+    bool is_correct = m_Capture.retrieve(frame);
     assert(is_correct && "Incorrect retrieve.");
-    return m_Frame;
+    return frame;
 }
 
 bool VideoStreamFromVideoFile::hasNext() {

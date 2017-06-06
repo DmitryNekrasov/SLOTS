@@ -4,12 +4,14 @@
 #include <memory>
 
 #include "videostream.h"
+#include "videostreamfromimagesequence.h"
 #include "videostreamfromvideofile.h"
 
-static const std::string g_Path = "/Users/ScanNorOne/Desktop/TrackingSamples/The_Rolling_Stones.mp4";
+static const std::string g_PathVideo = "/Users/ScanNorOne/Desktop/TrackingSamples/The_Rolling_Stones.mp4";
+static const std::string g_PathImages = "/Users/ScanNorOne/Desktop/TrackingSamples/Dataset/BlurOwl/BlurOwl/img";
 
 static void foo() {
-    std::unique_ptr<VideoStream> video_stream = std::make_unique<VideoStreamFromVideoFile>(g_Path);
+    std::unique_ptr<VideoStream> video_stream = std::make_unique<VideoStreamFromImageSequence>(g_PathImages);
     while (video_stream->hasNext()) {
         auto frame = video_stream->nextFrame();
         cv::imshow("video", frame);
