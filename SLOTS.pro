@@ -6,6 +6,8 @@
 
 QT       += core gui
 
+CONFIG += c++14
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = SLOTS
@@ -14,10 +16,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    videostream.cpp
+    videostream.cpp \
+    videostreamfromvideofile.cpp
 
 HEADERS  += mainwindow.h \
-    videostream.h
+    videostream.h \
+    videostreamfromvideofile.h
 
 FORMS    += mainwindow.ui
 

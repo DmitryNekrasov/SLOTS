@@ -5,7 +5,7 @@
 class VideoStream
 {
 public:
-    virtual cv::Mat& nextFrame() = 0;
+    VideoStream() {}
 
     VideoStream(const VideoStream&) = delete;
     VideoStream(VideoStream&&) = delete;
@@ -14,4 +14,6 @@ public:
     VideoStream& operator=(VideoStream&&) = delete;
 
     virtual ~VideoStream() = default;
+
+    virtual cv::Mat& nextFrame() = 0;
 };
