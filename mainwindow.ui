@@ -38,6 +38,9 @@
      <property name="text">
       <string>Камера</string>
      </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
     </widget>
     <widget class="QRadioButton" name="radioButton_VideoFile">
      <property name="geometry">
