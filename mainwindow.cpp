@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "videostream.h"
+#include "videostreamfromcamera.h"
 #include "videostreamfromimagesequence.h"
 #include "videostreamfromvideofile.h"
 
@@ -11,7 +12,7 @@ static const std::string g_PathVideo = "/Users/ScanNorOne/Desktop/TrackingSample
 static const std::string g_PathImages = "/Users/ScanNorOne/Desktop/TrackingSamples/Dataset/BlurOwl/BlurOwl/img";
 
 static void foo() {
-    std::unique_ptr<VideoStream> video_stream = std::make_unique<VideoStreamFromImageSequence>(g_PathImages);
+    std::unique_ptr<VideoStream> video_stream = std::make_unique<VideoStreamFromCamera>();
     while (video_stream->hasNext()) {
         auto frame = video_stream->nextFrame();
         cv::imshow("video", frame);

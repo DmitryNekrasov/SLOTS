@@ -21,6 +21,8 @@ public:
     VideoStreamFromImageSequence& operator=(const VideoStreamFromImageSequence&) = delete;
     VideoStreamFromImageSequence& operator=(VideoStreamFromImageSequence&&) = delete;
 
+    ~VideoStreamFromImageSequence() override = default;
+
     virtual cv::Mat nextFrame() override;
     virtual bool hasNext() override;
 

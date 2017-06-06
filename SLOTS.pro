@@ -18,12 +18,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     videostream.cpp \
     videostreamfromvideofile.cpp \
-    videostreamfromimagesequence.cpp
+    videostreamfromimagesequence.cpp \
+    videostreamfromcamera.cpp
 
 HEADERS  += mainwindow.h \
     videostream.h \
     videostreamfromvideofile.h \
-    videostreamfromimagesequence.h
+    videostreamfromimagesequence.h \
+    videostreamfromcamera.h
 
 FORMS    += mainwindow.ui
 
