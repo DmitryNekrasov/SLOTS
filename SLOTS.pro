@@ -17,11 +17,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     videostream.cpp \
-    videostreamfromvideofile.cpp
+    videostreamfromvideofile.cpp \
+    videostreamfromimagesequence.cpp
 
 HEADERS  += mainwindow.h \
     videostream.h \
-    videostreamfromvideofile.h
+    videostreamfromvideofile.h \
+    videostreamfromimagesequence.h
 
 FORMS    += mainwindow.ui
 

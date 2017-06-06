@@ -1,8 +1,7 @@
 #include "videostreamfromvideofile.h"
 
 VideoStreamFromVideoFile::VideoStreamFromVideoFile(const std::string& path)
-    : VideoStream()
-    , m_Capture(path)
+    : m_Capture(path)
 {
 }
 
