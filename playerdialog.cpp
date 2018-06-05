@@ -27,6 +27,9 @@ PlayerDialog::PlayerDialog(QString path, QWidget *parent) :
     connect(this, SIGNAL(repaintSignal()), this, SLOT(repaint()));
 
     m_SLTracker = std::make_unique<SLTracker>(std::make_unique<VideoStreamFromImageSequence>(m_Path.toUtf8().constData()));
+    mainExec();
+
+    setFixedWidth(START_VIDEO_GAP + m_Image.width());
 
     m_Timer = new QTimer();
     connect(m_Timer, SIGNAL(timeout()), this, SLOT(mainExec()));
@@ -49,7 +52,6 @@ void PlayerDialog::mainExec() {
 }
 
 void PlayerDialog::on_playButton_clicked() {
-    qDebug() << "In on_playButton_clicked()" << "\n";
     if (m_Timer->isActive()) {
         m_Timer->stop();
         ui->playButton->setText("▶");
@@ -63,6 +65,5 @@ void PlayerDialog::paintEvent(QPaintEvent*) {
     QPainter painter(this);
     if (m_Image.data_ptr() != NULL) {
         painter.drawImage(START_VIDEO_GAP, 0, m_Image);
-        qDebug() << "qqq" << "\n";
     }
 }

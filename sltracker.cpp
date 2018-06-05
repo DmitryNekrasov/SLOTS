@@ -8,8 +8,8 @@ SLTracker::SLTracker(std::unique_ptr<VideoStream> video_stream) :
     m_IsFinished(false)
 {
     m_Frame = m_VideoStream->nextFrame();
-    m_Roi = cv::selectROI("tracker", m_Frame);
-    qDebug() << "width: " << m_Roi.width << ", height: " << m_Roi.height << "\n";
+//    m_Roi = cv::selectROI("tracker", m_Frame);
+    m_Roi = cv::Rect2d(241, 179, 14, 24);
 
     m_Tracker->init(m_Frame, m_Roi);
 }
@@ -19,8 +19,6 @@ void SLTracker::update() {
         m_Frame = m_VideoStream->nextFrame();
         m_Tracker->update(m_Frame, m_Roi);
         cv::rectangle(m_Frame, m_Roi, cv::Scalar(0, 0, 255), 2, 1);
-
-        cv::imshow("tracker", m_Frame);
     } else {
         m_IsFinished = true;
     }
