@@ -25,3 +25,7 @@ cv::Mat VideoStreamFromImageSequence::nextFrame() {
 bool VideoStreamFromImageSequence::hasNext() {
     return m_Iter != m_Pathways.end();
 }
+
+double VideoStreamFromImageSequence::getPercentageOfVideo() {
+    return (m_Iter - m_Pathways.begin()) / double(m_Pathways.size()) * 100;
+}

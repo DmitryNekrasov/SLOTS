@@ -25,6 +25,7 @@ public:
 
     virtual cv::Mat nextFrame() override;
     virtual bool hasNext() override;
+    virtual double getPercentageOfVideo() override;
 
 private:
     std::vector<std::string> m_Pathways;

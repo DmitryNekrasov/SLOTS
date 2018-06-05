@@ -19,6 +19,7 @@ public:
 
     virtual cv::Mat nextFrame() override;
     virtual bool hasNext() override;
+    virtual double getPercentageOfVideo() override;
 
 private:
     cv::VideoCapture m_Capture;

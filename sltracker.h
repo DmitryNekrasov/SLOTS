@@ -18,6 +18,7 @@ public:
     void update();
     QImage getFrameAsQImage();
     bool isFinished();
+    double getPercentageOfVideo();
 
 private:
     std::unique_ptr<VideoStream> m_VideoStream;

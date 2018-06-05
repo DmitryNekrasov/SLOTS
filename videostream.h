@@ -17,4 +17,5 @@ public:
 
     virtual cv::Mat nextFrame() = 0;
     virtual bool hasNext() = 0;
+    virtual double getPercentageOfVideo() = 0;
 };

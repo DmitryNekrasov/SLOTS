@@ -14,3 +14,7 @@ cv::Mat VideoStreamFromCamera::nextFrame() {
 bool VideoStreamFromCamera::hasNext() {
     return true;
 }
+
+double VideoStreamFromCamera::getPercentageOfVideo() {
+    return 0;
+}

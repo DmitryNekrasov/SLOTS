@@ -17,3 +17,7 @@ cv::Mat VideoStreamFromVideoFile::nextFrame() {
 bool VideoStreamFromVideoFile::hasNext() {
     return m_Capture.grab();
 }
+
+double VideoStreamFromVideoFile::getPercentageOfVideo() {
+    return 0;
+}

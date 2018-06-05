@@ -6,7 +6,9 @@
 
 #include <videostreamfromimagesequence.h>
 
-static const int START_VIDEO_GAP = 130;
+static const int START_VIDEO_GAP_X = 130;
+static const int START_VIDEO_GAP_Y = 23;
+static const int SLIDER_RIGHT_GAP = 5;
 
 PlayerDialog::PlayerDialog(QWidget *parent) :
     QDialog(parent),
@@ -29,7 +31,8 @@ PlayerDialog::PlayerDialog(QString path, QWidget *parent) :
     m_SLTracker = std::make_unique<SLTracker>(std::make_unique<VideoStreamFromImageSequence>(m_Path.toUtf8().constData()));
     mainExec();
 
-    setFixedWidth(START_VIDEO_GAP + m_Image.width());
+    setFixedWidth(START_VIDEO_GAP_X + m_Image.width());
+    ui->horizontalSlider->setMinimumWidth(m_Image.width() - SLIDER_RIGHT_GAP);
 
     m_Timer = new QTimer();
     connect(m_Timer, SIGNAL(timeout()), this, SLOT(mainExec()));
@@ -45,6 +48,7 @@ void PlayerDialog::mainExec() {
         m_SLTracker->update();
         m_Image = m_SLTracker->getFrameAsQImage();
         repaintSignal();
+        ui->horizontalSlider->setSliderPosition(int(m_SLTracker->getPercentageOfVideo()));
     } else {
         m_Timer->stop();
         ui->playButton->setText("▶");
@@ -64,6 +68,6 @@ void PlayerDialog::on_playButton_clicked() {
 void PlayerDialog::paintEvent(QPaintEvent*) {
     QPainter painter(this);
     if (m_Image.data_ptr() != NULL) {
-        painter.drawImage(START_VIDEO_GAP, 0, m_Image);
+        painter.drawImage(START_VIDEO_GAP_X, START_VIDEO_GAP_Y, m_Image);
     }
 }
