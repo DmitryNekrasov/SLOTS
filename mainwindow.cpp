@@ -15,6 +15,8 @@
 
 #include <opencv2/tracking/tracking.hpp>
 
+#include <playerdialog.h>
+
 static const std::string g_PathVideo = "/Users/ScanNorOne/Desktop/TrackingSamples/The_Rolling_Stones.mp4";
 static const std::string g_PathImages = "/Users/ScanNorOne/Desktop/TrackingSamples/Dataset/Bolt/Bolt/img";
 
@@ -96,7 +98,8 @@ void MainWindow::on_pushButton_Open_clicked() {
 void MainWindow::on_pushButton_LoadVideoStream_clicked() {
     QString path = ui->lineEdit_Path->text();
     if (ui->radioButton_ImageSequence->isChecked() && path != "") {
-        qDebug() << "path: " << path << "\n";
-        foo(path.toUtf8().constData());
+        PlayerDialog *playerDialog = new PlayerDialog(path);
+        playerDialog->show();
+//        foo(path.toUtf8().constData());
     }
 }

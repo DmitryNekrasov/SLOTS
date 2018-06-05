@@ -19,15 +19,18 @@ SOURCES += main.cpp\
     videostream.cpp \
     videostreamfromvideofile.cpp \
     videostreamfromimagesequence.cpp \
-    videostreamfromcamera.cpp
+    videostreamfromcamera.cpp \
+    playerdialog.cpp
 
 HEADERS  += mainwindow.h \
     videostream.h \
     videostreamfromvideofile.h \
     videostreamfromimagesequence.h \
-    videostreamfromcamera.h
+    videostreamfromcamera.h \
+    playerdialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    playerdialog.ui
 
 INCLUDEPATH += /usr/local/Cellar/opencv3/3.2.0/include \
                /usr/local/Cellar/boost/1.62.0/include

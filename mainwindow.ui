@@ -91,7 +91,7 @@
       </rect>
      </property>
      <property name="text">
-      <string/>
+      <string>/Users/ScanNorOne/Desktop/TrackingSamples/Dataset/Bolt/Bolt/img</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_Open">
