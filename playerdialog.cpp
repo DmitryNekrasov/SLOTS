@@ -89,7 +89,7 @@ void PlayerDialog::mousePressEvent(QMouseEvent* ev) {
     g_IsPressed = true;
 }
 
-void PlayerDialog::mouseReleaseEvent(QMouseEvent* ev) {
+void PlayerDialog::mouseReleaseEvent(QMouseEvent*) {
     g_IsPressed = false;
     int x = g_X - START_VIDEO_GAP_X;
     int y = g_Y - START_VIDEO_GAP_Y;
@@ -107,19 +107,10 @@ void PlayerDialog::mouseReleaseEvent(QMouseEvent* ev) {
 
 void PlayerDialog::mouseMoveEvent(QMouseEvent* ev) {
     if (g_IsPressed) {
-        int x = ev->x();
         g_Width = ev->x() - g_X;
         g_Height = ev->y()- g_Y;
         repaintSignal();
     }
-}
-
-int normalizeX(int x) {
-    return x - START_VIDEO_GAP_X;
-}
-
-int normalizeY(int y) {
-    return y - START_VIDEO_GAP_Y;
 }
 
 void PlayerDialog::on_stopButton_clicked() {
