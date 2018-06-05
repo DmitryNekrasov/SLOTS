@@ -6,7 +6,7 @@
 
 #include <videostreamfromimagesequence.h>
 
-static const int START_VIDEO_GAP_X = 130;
+static const int START_VIDEO_GAP_X = 127;
 static const int START_VIDEO_GAP_Y = 23;
 static const int SLIDER_RIGHT_GAP = 5;
 
@@ -28,8 +28,7 @@ PlayerDialog::PlayerDialog(QString path, QWidget *parent) :
 
     connect(this, SIGNAL(repaintSignal()), this, SLOT(repaint()));
 
-    m_SLTracker = std::make_unique<SLTracker>(std::make_unique<VideoStreamFromImageSequence>(m_Path.toUtf8().constData()));
-    mainExec();
+    refreshTracker();
 
     setFixedWidth(START_VIDEO_GAP_X + m_Image.width());
     ui->horizontalSlider->setMinimumWidth(m_Image.width() - SLIDER_RIGHT_GAP);
@@ -52,6 +51,7 @@ void PlayerDialog::mainExec() {
     } else {
         m_Timer->stop();
         ui->playButton->setText("▶");
+        ui->playButton->setEnabled(false);
     }
 }
 
@@ -70,4 +70,16 @@ void PlayerDialog::paintEvent(QPaintEvent*) {
     if (m_Image.data_ptr() != NULL) {
         painter.drawImage(START_VIDEO_GAP_X, START_VIDEO_GAP_Y, m_Image);
     }
+}
+
+void PlayerDialog::on_stopButton_clicked() {
+    refreshTracker();
+    m_Timer->stop();
+    ui->playButton->setText("▶");
+    ui->playButton->setEnabled(true);
+}
+
+void PlayerDialog::refreshTracker() {
+    m_SLTracker = std::make_unique<SLTracker>(std::make_unique<VideoStreamFromImageSequence>(m_Path.toUtf8().constData()));
+    mainExec();
 }

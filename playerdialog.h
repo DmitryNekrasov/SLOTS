@@ -28,6 +28,9 @@ private:
 private:
     std::unique_ptr<SLTracker> m_SLTracker;
 
+private:
+    void refreshTracker();
+
 protected:
     void paintEvent(QPaintEvent*);
 
@@ -37,6 +40,7 @@ signals:
 private slots:
     void mainExec();
     void on_playButton_clicked();
+    void on_stopButton_clicked();
 };
 
 #endif // PLAYERDIALOG_H
