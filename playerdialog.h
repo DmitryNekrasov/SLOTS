@@ -23,7 +23,7 @@ private:
     Ui::PlayerDialog *ui;
     QString m_Path;
     QTimer *m_Timer;
-    QImage *m_Image;
+    QImage m_Image;
 
 private:
     std::unique_ptr<SLTracker> m_SLTracker;

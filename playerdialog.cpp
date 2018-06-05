@@ -6,6 +6,8 @@
 
 #include <videostreamfromimagesequence.h>
 
+static const int START_VIDEO_GAP = 130;
+
 PlayerDialog::PlayerDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PlayerDialog)
@@ -36,7 +38,14 @@ PlayerDialog::~PlayerDialog()
 }
 
 void PlayerDialog::mainExec() {
-    m_SLTracker->update();
+    if (!m_SLTracker->isFinished()) {
+        m_SLTracker->update();
+        m_Image = m_SLTracker->getFrameAsQImage();
+        repaintSignal();
+    } else {
+        m_Timer->stop();
+        ui->playButton->setText("▶");
+    }
 }
 
 void PlayerDialog::on_playButton_clicked() {
@@ -52,9 +61,8 @@ void PlayerDialog::on_playButton_clicked() {
 
 void PlayerDialog::paintEvent(QPaintEvent*) {
     QPainter painter(this);
-    if (m_Image != NULL) {
-        painter.drawImage(0, 0, *m_Image);
+    if (m_Image.data_ptr() != NULL) {
+        painter.drawImage(START_VIDEO_GAP, 0, m_Image);
+        qDebug() << "qqq" << "\n";
     }
-
-    qDebug() << "qqq" << "\n";
 }

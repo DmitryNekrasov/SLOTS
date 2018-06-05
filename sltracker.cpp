@@ -4,7 +4,8 @@
 
 SLTracker::SLTracker(std::unique_ptr<VideoStream> video_stream) :
     m_VideoStream(std::move(video_stream)),
-    m_Tracker(cv::Tracker::create("KCF"))
+    m_Tracker(cv::Tracker::create("KCF")),
+    m_IsFinished(false)
 {
     m_Frame = m_VideoStream->nextFrame();
     m_Roi = cv::selectROI("tracker", m_Frame);
@@ -20,5 +21,17 @@ void SLTracker::update() {
         cv::rectangle(m_Frame, m_Roi, cv::Scalar(0, 0, 255), 2, 1);
 
         cv::imshow("tracker", m_Frame);
+    } else {
+        m_IsFinished = true;
     }
+}
+
+QImage SLTracker::getFrameAsQImage() {
+    cv::cvtColor(m_Frame, m_Frame, CV_BGR2RGB);
+    QImage qimg((uchar*)m_Frame.data, m_Frame.cols, m_Frame.rows, m_Frame.step, QImage::Format_RGB888);
+    return qimg;
+}
+
+bool SLTracker::isFinished() {
+    return m_IsFinished;
 }
