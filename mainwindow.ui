@@ -90,6 +90,9 @@
        <height>24</height>
       </rect>
      </property>
+     <property name="text">
+      <string/>
+     </property>
     </widget>
     <widget class="QPushButton" name="pushButton_Open">
      <property name="geometry">
@@ -134,7 +137,7 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>true</bool>
+    <bool>false</bool>
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>

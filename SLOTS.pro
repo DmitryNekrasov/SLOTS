@@ -73,7 +73,8 @@ LIBS += -L/usr/local/Cellar/opencv3/3.2.0/lib \
         -lopencv_core \
         -lopencv_optflow \
         -lopencv_text \
-        -lopencv_face
+        -lopencv_face \
+        -lopencv_tracking
 
 LIBS += -L/usr/local/Cellar/boost/1.62.0/lib \
         -lboost_filesystem \

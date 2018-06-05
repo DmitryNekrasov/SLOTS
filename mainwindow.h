@@ -20,6 +20,8 @@ private slots:
 
     void on_pushButton_Open_clicked();
 
+    void on_pushButton_LoadVideoStream_clicked();
+
 private:
     Ui::MainWindow *ui;
 

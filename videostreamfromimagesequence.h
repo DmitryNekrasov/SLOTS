@@ -27,5 +27,6 @@ public:
     virtual bool hasNext() override;
 
 private:
-    bfs::directory_iterator m_Iter;
+    std::vector<std::string> m_Pathways;
+    std::vector<std::string>::iterator m_Iter;
 };
