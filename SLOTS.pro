@@ -20,14 +20,16 @@ SOURCES += main.cpp\
     videostreamfromvideofile.cpp \
     videostreamfromimagesequence.cpp \
     videostreamfromcamera.cpp \
-    playerdialog.cpp
+    playerdialog.cpp \
+    sltracker.cpp
 
 HEADERS  += mainwindow.h \
     videostream.h \
     videostreamfromvideofile.h \
     videostreamfromimagesequence.h \
     videostreamfromcamera.h \
-    playerdialog.h
+    playerdialog.h \
+    sltracker.h
 
 FORMS    += mainwindow.ui \
     playerdialog.ui

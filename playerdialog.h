@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QTimer>
 
+#include <sltracker.h>
+
 namespace Ui {
 class PlayerDialog;
 }
@@ -22,6 +24,9 @@ private:
     QString m_Path;
     QTimer *m_Timer;
     QImage *m_Image;
+
+private:
+    std::unique_ptr<SLTracker> m_SLTracker;
 
 protected:
     void paintEvent(QPaintEvent*);

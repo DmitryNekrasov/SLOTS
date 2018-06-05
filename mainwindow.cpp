@@ -17,47 +17,6 @@
 
 #include <playerdialog.h>
 
-static const std::string g_PathVideo = "/Users/ScanNorOne/Desktop/TrackingSamples/The_Rolling_Stones.mp4";
-static const std::string g_PathImages = "/Users/ScanNorOne/Desktop/TrackingSamples/Dataset/Bolt/Bolt/img";
-
-static void foo(std::string path) {
-    std::unique_ptr<VideoStream> video_stream = std::make_unique<VideoStreamFromImageSequence>(path);
-
-    cv::Ptr<cv::Tracker> tracker = cv::Tracker::create("KCF");
-
-    auto frame = video_stream->nextFrame();
-
-    cv::Rect2d roi = cv::selectROI("tracker", frame);
-    qDebug() << "width: " << roi.width << ", height: " << roi.height << "\n";
-
-    tracker->init(frame, roi);
-
-    qDebug() << "Start the tracking process, press ESC to quit" << "\n";
-
-    while (video_stream->hasNext()) {
-        auto next_frame = video_stream->nextFrame();
-        tracker->update(next_frame, roi);
-        cv::rectangle(next_frame, roi, cv::Scalar(0, 0, 255), 2, 1);
-
-        cv::imshow("tracker", next_frame);
-
-        if (cv::waitKey(1) == 27) {
-            break;
-        }
-    }
-
-    while (video_stream->hasNext()) {
-        auto frame = video_stream->nextFrame();
-        cv::imshow("video", frame);
-        if (cv::waitKey(1) == 27) {
-            break;
-        }
-        if (cv::waitKey(1) == 27) {
-            break;
-        }
-    }
-}
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -100,6 +59,5 @@ void MainWindow::on_pushButton_LoadVideoStream_clicked() {
     if (ui->radioButton_ImageSequence->isChecked() && path != "") {
         PlayerDialog *playerDialog = new PlayerDialog(path);
         playerDialog->show();
-//        foo(path.toUtf8().constData());
     }
 }

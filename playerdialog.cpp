@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QPainter>
 
+#include <videostreamfromimagesequence.h>
+
 PlayerDialog::PlayerDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PlayerDialog)
@@ -22,6 +24,8 @@ PlayerDialog::PlayerDialog(QString path, QWidget *parent) :
 
     connect(this, SIGNAL(repaintSignal()), this, SLOT(repaint()));
 
+    m_SLTracker = std::make_unique<SLTracker>(std::make_unique<VideoStreamFromImageSequence>(m_Path.toUtf8().constData()));
+
     m_Timer = new QTimer();
     connect(m_Timer, SIGNAL(timeout()), this, SLOT(mainExec()));
 }
@@ -32,7 +36,7 @@ PlayerDialog::~PlayerDialog()
 }
 
 void PlayerDialog::mainExec() {
-//    qDebug() << "In mainExec()" << "\n";
+    m_SLTracker->update();
 }
 
 void PlayerDialog::on_playButton_clicked() {
