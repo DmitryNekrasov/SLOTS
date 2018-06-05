@@ -2,6 +2,7 @@
 #define PLAYERDIALOG_H
 
 #include <QDialog>
+#include <QMouseEvent>
 #include <QTimer>
 
 #include <sltracker.h>
@@ -17,6 +18,11 @@ class PlayerDialog : public QDialog
 public:
     explicit PlayerDialog(QWidget *parent = 0);
     explicit PlayerDialog(QString path, QWidget *parent = 0);
+
+    void mousePressEvent(QMouseEvent* ev) override;
+    void mouseReleaseEvent(QMouseEvent* ev) override;
+    void mouseMoveEvent(QMouseEvent* ev) override;
+
     ~PlayerDialog();
 
 private:
@@ -32,7 +38,7 @@ private:
     void refreshTracker();
 
 protected:
-    void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*) override;
 
 signals:
     void repaintSignal();

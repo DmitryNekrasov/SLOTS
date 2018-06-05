@@ -8,9 +8,6 @@ SLTracker::SLTracker(std::unique_ptr<VideoStream> video_stream) :
     m_IsFinished(false)
 {
     m_Frame = m_VideoStream->nextFrame();
-    m_Roi = cv::Rect2d(241, 179, 14, 24);
-
-    m_Tracker->init(m_Frame, m_Roi);
 }
 
 void SLTracker::update() {
@@ -35,4 +32,9 @@ bool SLTracker::isFinished() {
 
 double SLTracker::getPercentageOfVideo() {
     return m_VideoStream->getPercentageOfVideo();
+}
+
+void SLTracker::setRoi(cv::Rect2d roi) {
+    m_Roi = roi;
+    m_Tracker->init(m_Frame, m_Roi);
 }

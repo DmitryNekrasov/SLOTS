@@ -1,6 +1,8 @@
 #include "playerdialog.h"
 #include "ui_playerdialog.h"
 
+#include <cstdlib>
+
 #include <QDebug>
 #include <QPainter>
 
@@ -9,6 +11,9 @@
 static const int START_VIDEO_GAP_X = 127;
 static const int START_VIDEO_GAP_Y = 23;
 static const int SLIDER_RIGHT_GAP = 5;
+
+static int g_X, g_Y, g_Width, g_Height;
+static bool g_IsPressed = false;
 
 PlayerDialog::PlayerDialog(QWidget *parent) :
     QDialog(parent),
@@ -67,9 +72,54 @@ void PlayerDialog::on_playButton_clicked() {
 
 void PlayerDialog::paintEvent(QPaintEvent*) {
     QPainter painter(this);
+    QPen pen(QColor("#ff0000"), 3);
+    painter.setPen(pen);
+
     if (m_Image.data_ptr() != NULL) {
         painter.drawImage(START_VIDEO_GAP_X, START_VIDEO_GAP_Y, m_Image);
     }
+    if (g_IsPressed) {
+        painter.drawRect(g_X, g_Y, g_Width, g_Height);
+    }
+}
+
+void PlayerDialog::mousePressEvent(QMouseEvent* ev) {
+    g_X = ev->x();
+    g_Y = ev->y();
+    g_IsPressed = true;
+}
+
+void PlayerDialog::mouseReleaseEvent(QMouseEvent* ev) {
+    g_IsPressed = false;
+    int x = g_X - START_VIDEO_GAP_X;
+    int y = g_Y - START_VIDEO_GAP_Y;
+    if (g_Width < 0) {
+        x = x + g_Width;
+        g_Width = -g_Width;
+    }
+    if (g_Height < 0) {
+        y = y + g_Height;
+        g_Height = -g_Height;
+    }
+    cv::Rect2d roi(x, y, g_Width, g_Height);
+    m_SLTracker->setRoi(roi);
+}
+
+void PlayerDialog::mouseMoveEvent(QMouseEvent* ev) {
+    if (g_IsPressed) {
+        int x = ev->x();
+        g_Width = ev->x() - g_X;
+        g_Height = ev->y()- g_Y;
+        repaintSignal();
+    }
+}
+
+int normalizeX(int x) {
+    return x - START_VIDEO_GAP_X;
+}
+
+int normalizeY(int y) {
+    return y - START_VIDEO_GAP_Y;
 }
 
 void PlayerDialog::on_stopButton_clicked() {

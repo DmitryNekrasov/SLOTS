@@ -19,6 +19,7 @@ public:
     QImage getFrameAsQImage();
     bool isFinished();
     double getPercentageOfVideo();
+    void setRoi(cv::Rect2d roi);
 
 private:
     std::unique_ptr<VideoStream> m_VideoStream;
