@@ -65,7 +65,23 @@ void PlayerDialog::on_playButton_clicked() {
     if (m_VideoOnStart) {
         m_VideoOnStart = false;
 
-        auto& rect = m_Rects.back();
+        auto rois = convertRectsToRois();
+
+        m_SLTracker->setRois(rois);
+    }
+
+    if (m_Timer->isActive()) {
+        m_Timer->stop();
+        ui->playButton->setText("▶");
+    } else {
+        m_Timer->start();
+        ui->playButton->setText("❚❚");
+    }
+}
+
+std::vector<cv::Rect2d> PlayerDialog::convertRectsToRois() {
+    std::vector<cv::Rect2d> rois;
+    for (auto&& rect : m_Rects) {
         cv::Rect2d roi(rect);
         roi.x = rect.x - START_VIDEO_GAP_X;
         roi.y = rect.y - START_VIDEO_GAP_Y;
@@ -77,16 +93,9 @@ void PlayerDialog::on_playButton_clicked() {
             roi.y = roi.y + rect.height;
             roi.height = -rect.height;
         }
-        m_SLTracker->setRoi(roi);
+        rois.push_back(roi);
     }
-
-    if (m_Timer->isActive()) {
-        m_Timer->stop();
-        ui->playButton->setText("▶");
-    } else {
-        m_Timer->start();
-        ui->playButton->setText("❚❚");
-    }
+    return rois;
 }
 
 void PlayerDialog::paintEvent(QPaintEvent*) {

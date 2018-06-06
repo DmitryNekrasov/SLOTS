@@ -1,7 +1,7 @@
 #ifndef SLTRACKER_H
 #define SLTRACKER_H
 
-#include <memory>
+#include <vector>
 
 #include <videostream.h>
 
@@ -19,12 +19,12 @@ public:
     QImage getFrameAsQImage();
     bool isFinished();
     double getPercentageOfVideo();
-    void setRoi(cv::Rect2d roi);
+    void setRois(std::vector<cv::Rect2d> rois);
 
 private:
     std::unique_ptr<VideoStream> m_VideoStream;
     cv::Ptr<cv::Tracker> m_Tracker, m_Tracker2;
-    cv::Rect2d m_Roi, m_Roi2;
+    std::vector<cv::Rect2d> m_Rois;
     cv::Mat m_Frame;
     bool m_IsFinished;
 };

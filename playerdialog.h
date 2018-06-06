@@ -42,6 +42,7 @@ private:
 
 private:
     void refreshTracker();
+    std::vector<cv::Rect2d> convertRectsToRois();
 
 protected:
     void paintEvent(QPaintEvent*) override;
