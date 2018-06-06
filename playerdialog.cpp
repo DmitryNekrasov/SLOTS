@@ -26,7 +26,8 @@ PlayerDialog::PlayerDialog(QString path, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PlayerDialog),
     m_Path(path),
-    m_Image(NULL)
+    m_Image(NULL),
+    m_VideoOnStart(true)
 {
     ui->setupUi(this);
     qDebug() << m_Path << "\n";
@@ -40,6 +41,8 @@ PlayerDialog::PlayerDialog(QString path, QWidget *parent) :
 
     m_Timer = new QTimer();
     connect(m_Timer, SIGNAL(timeout()), this, SLOT(mainExec()));
+
+    qDebug() << m_VideoOnStart << "\n";
 }
 
 PlayerDialog::~PlayerDialog()
@@ -61,6 +64,7 @@ void PlayerDialog::mainExec() {
 }
 
 void PlayerDialog::on_playButton_clicked() {
+    m_VideoOnStart = false;
     if (m_Timer->isActive()) {
         m_Timer->stop();
         ui->playButton->setText("▶");
@@ -84,29 +88,33 @@ void PlayerDialog::paintEvent(QPaintEvent*) {
 }
 
 void PlayerDialog::mousePressEvent(QMouseEvent* ev) {
-    g_X = ev->x();
-    g_Y = ev->y();
-    g_IsPressed = true;
+    if (m_VideoOnStart) {
+        g_X = ev->x();
+        g_Y = ev->y();
+        g_IsPressed = true;
+    }
 }
 
 void PlayerDialog::mouseReleaseEvent(QMouseEvent*) {
-    g_IsPressed = false;
-    int x = g_X - START_VIDEO_GAP_X;
-    int y = g_Y - START_VIDEO_GAP_Y;
-    if (g_Width < 0) {
-        x = x + g_Width;
-        g_Width = -g_Width;
+    if (m_VideoOnStart) {
+        g_IsPressed = false;
+        int x = g_X - START_VIDEO_GAP_X;
+        int y = g_Y - START_VIDEO_GAP_Y;
+        if (g_Width < 0) {
+            x = x + g_Width;
+            g_Width = -g_Width;
+        }
+        if (g_Height < 0) {
+            y = y + g_Height;
+            g_Height = -g_Height;
+        }
+        cv::Rect2d roi(x, y, g_Width, g_Height);
+        m_SLTracker->setRoi(roi);
     }
-    if (g_Height < 0) {
-        y = y + g_Height;
-        g_Height = -g_Height;
-    }
-    cv::Rect2d roi(x, y, g_Width, g_Height);
-    m_SLTracker->setRoi(roi);
 }
 
 void PlayerDialog::mouseMoveEvent(QMouseEvent* ev) {
-    if (g_IsPressed) {
+    if (m_VideoOnStart && g_IsPressed) {
         g_Width = ev->x() - g_X;
         g_Height = ev->y()- g_Y;
         repaintSignal();
@@ -114,6 +122,7 @@ void PlayerDialog::mouseMoveEvent(QMouseEvent* ev) {
 }
 
 void PlayerDialog::on_stopButton_clicked() {
+    m_VideoOnStart = true;
     refreshTracker();
     m_Timer->stop();
     ui->playButton->setText("▶");

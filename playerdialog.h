@@ -33,6 +33,7 @@ private:
 
 private:
     std::unique_ptr<SLTracker> m_SLTracker;
+    bool m_VideoOnStart;
 
 private:
     void refreshTracker();
