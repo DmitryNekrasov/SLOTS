@@ -12,7 +12,6 @@ static const int START_VIDEO_GAP_X = 127;
 static const int START_VIDEO_GAP_Y = 23;
 static const int SLIDER_RIGHT_GAP = 5;
 
-static int g_X, g_Y, g_Width, g_Height;
 static bool g_IsPressed = false;
 
 PlayerDialog::PlayerDialog(QWidget *parent) :
@@ -30,7 +29,8 @@ PlayerDialog::PlayerDialog(QString path, QWidget *parent) :
     m_VideoOnStart(true)
 {
     ui->setupUi(this);
-    qDebug() << m_Path << "\n";
+
+    m_Rects.clear();
 
     connect(this, SIGNAL(repaintSignal()), this, SLOT(repaint()));
 
@@ -41,8 +41,6 @@ PlayerDialog::PlayerDialog(QString path, QWidget *parent) :
 
     m_Timer = new QTimer();
     connect(m_Timer, SIGNAL(timeout()), this, SLOT(mainExec()));
-
-    qDebug() << m_VideoOnStart << "\n";
 }
 
 PlayerDialog::~PlayerDialog()
@@ -64,7 +62,24 @@ void PlayerDialog::mainExec() {
 }
 
 void PlayerDialog::on_playButton_clicked() {
-    m_VideoOnStart = false;
+    if (m_VideoOnStart) {
+        m_VideoOnStart = false;
+
+        auto& rect = m_Rects.back();
+        cv::Rect2d roi(rect);
+        roi.x = rect.x - START_VIDEO_GAP_X;
+        roi.y = rect.y - START_VIDEO_GAP_Y;
+        if (rect.width < 0) {
+            roi.x = roi.x + rect.width;
+            roi.width = -rect.width;
+        }
+        if (rect.height < 0) {
+            roi.y = roi.y + rect.height;
+            roi.height = -rect.height;
+        }
+        m_SLTracker->setRoi(roi);
+    }
+
     if (m_Timer->isActive()) {
         m_Timer->stop();
         ui->playButton->setText("▶");
@@ -82,15 +97,17 @@ void PlayerDialog::paintEvent(QPaintEvent*) {
     if (m_Image.data_ptr() != NULL) {
         painter.drawImage(START_VIDEO_GAP_X, START_VIDEO_GAP_Y, m_Image);
     }
+
     if (g_IsPressed) {
-        painter.drawRect(g_X, g_Y, g_Width, g_Height);
+        for (auto&& rect : m_Rects) {
+            painter.drawRect(rect.x, rect.y, rect.width, rect.height);
+        }
     }
 }
 
 void PlayerDialog::mousePressEvent(QMouseEvent* ev) {
     if (m_VideoOnStart) {
-        g_X = ev->x();
-        g_Y = ev->y();
+        m_Rects.emplace_back(ev->x(), ev->y(), 0, 0);
         g_IsPressed = true;
     }
 }
@@ -98,31 +115,21 @@ void PlayerDialog::mousePressEvent(QMouseEvent* ev) {
 void PlayerDialog::mouseReleaseEvent(QMouseEvent*) {
     if (m_VideoOnStart) {
         g_IsPressed = false;
-        int x = g_X - START_VIDEO_GAP_X;
-        int y = g_Y - START_VIDEO_GAP_Y;
-        if (g_Width < 0) {
-            x = x + g_Width;
-            g_Width = -g_Width;
-        }
-        if (g_Height < 0) {
-            y = y + g_Height;
-            g_Height = -g_Height;
-        }
-        cv::Rect2d roi(x, y, g_Width, g_Height);
-        m_SLTracker->setRoi(roi);
     }
 }
 
 void PlayerDialog::mouseMoveEvent(QMouseEvent* ev) {
     if (m_VideoOnStart && g_IsPressed) {
-        g_Width = ev->x() - g_X;
-        g_Height = ev->y()- g_Y;
+        auto& rect = m_Rects.back();
+        rect.width = ev->x() - rect.x;
+        rect.height = ev->y()- rect.y;
         repaintSignal();
     }
 }
 
 void PlayerDialog::on_stopButton_clicked() {
     m_VideoOnStart = true;
+    m_Rects.clear();
     refreshTracker();
     m_Timer->stop();
     ui->playButton->setText("▶");

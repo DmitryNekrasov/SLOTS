@@ -7,6 +7,10 @@
 
 #include <sltracker.h>
 
+#include <opencv2/opencv.hpp>
+
+#include <vector>
+
 namespace Ui {
 class PlayerDialog;
 }
@@ -34,6 +38,7 @@ private:
 private:
     std::unique_ptr<SLTracker> m_SLTracker;
     bool m_VideoOnStart;
+    std::vector<cv::Rect2i> m_Rects;
 
 private:
     void refreshTracker();
