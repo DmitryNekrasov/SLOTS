@@ -4,8 +4,6 @@
 
 SLTracker::SLTracker(std::unique_ptr<VideoStream> video_stream) :
     m_VideoStream(std::move(video_stream)),
-    m_Tracker(cv::Tracker::create("KCF")),
-    m_Tracker2(cv::Tracker::create("KCF")),
     m_IsFinished(false)
 {
     m_Frame = m_VideoStream->nextFrame();
@@ -14,12 +12,12 @@ SLTracker::SLTracker(std::unique_ptr<VideoStream> video_stream) :
 void SLTracker::update() {
     if (m_VideoStream->hasNext()) {
         m_Frame = m_VideoStream->nextFrame();
-        cv::Mat new_frame(m_Frame);
-        m_Tracker->update(m_Frame, m_Rois[0]);
-        m_Tracker2->update(new_frame, m_Rois[1]);
-        if (m_Rois.size() == 2) {
-            cv::rectangle(m_Frame, m_Rois[0], cv::Scalar(0, 0, 255), 2, 1);
-            cv::rectangle(m_Frame, m_Rois[1], cv::Scalar(0, 0, 255), 2, 1);
+        size_t roi_index = 0;
+        for (auto&& tracker : m_Trackers) {
+            tracker->update(m_Frame, m_Rois[roi_index++]);
+        }
+        for (auto&& roi : m_Rois) {
+            cv::rectangle(m_Frame, roi, cv::Scalar(0, 0, 255), 2, 1);
         }
     } else {
         m_IsFinished = true;
@@ -42,7 +40,8 @@ double SLTracker::getPercentageOfVideo() {
 
 void SLTracker::setRois(std::vector<cv::Rect2d> rois) {
     m_Rois = rois;
-    m_Tracker->init(m_Frame, m_Rois[0]);
-    cv::Mat new_frame(m_Frame);
-    m_Tracker2->init(new_frame, m_Rois[1]);
+    for (auto&& roi : rois) {
+        m_Trackers.push_back(cv::Tracker::create("KCF"));
+        m_Trackers.back()->init(m_Frame, roi);
+    }
 }

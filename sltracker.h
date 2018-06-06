@@ -23,7 +23,7 @@ public:
 
 private:
     std::unique_ptr<VideoStream> m_VideoStream;
-    cv::Ptr<cv::Tracker> m_Tracker, m_Tracker2;
+    std::vector<cv::Ptr<cv::Tracker>> m_Trackers;
     std::vector<cv::Rect2d> m_Rois;
     cv::Mat m_Frame;
     bool m_IsFinished;
