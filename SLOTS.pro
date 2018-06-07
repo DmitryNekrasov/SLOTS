@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     videostreamfromimagesequence.cpp \
     videostreamfromcamera.cpp \
     playerdialog.cpp \
-    trackerrunner.cpp
+    trackerrunner.cpp \
+    defaultsmarttracker.cpp
 
 HEADERS  += mainwindow.h \
     videostream.h \
@@ -29,7 +30,9 @@ HEADERS  += mainwindow.h \
     videostreamfromimagesequence.h \
     videostreamfromcamera.h \
     playerdialog.h \
-    trackerrunner.h
+    trackerrunner.h \
+    smarttracker.h \
+    defaultsmarttracker.h
 
 FORMS    += mainwindow.ui \
     playerdialog.ui

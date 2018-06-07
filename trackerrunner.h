@@ -4,9 +4,9 @@
 
 #include <videostream.h>
 
-#include <opencv2/tracking/tracking.hpp>
-
 #include <QImage>
+
+#include "smarttracker.h"
 
 class TrackerRunner
 {
@@ -22,7 +22,7 @@ public:
 
 private:
     std::unique_ptr<VideoStream> m_VideoStream;
-    std::vector<cv::Ptr<cv::Tracker>> m_Trackers;
+    std::vector<std::unique_ptr<SmartTracker>> m_Trackers;
     std::vector<cv::Rect2d> m_Rois;
     cv::Mat m_Frame;
     bool m_IsFinished;

@@ -1,5 +1,7 @@
 #include "trackerrunner.h"
 
+#include "defaultsmarttracker.h"
+
 #include <QDebug>
 
 TrackerRunner::TrackerRunner(std::unique_ptr<VideoStream> video_stream) :
@@ -41,7 +43,7 @@ double TrackerRunner::getPercentageOfVideo() {
 void TrackerRunner::setRois(std::vector<cv::Rect2d> rois) {
     m_Rois = rois;
     for (auto&& roi : rois) {
-        m_Trackers.push_back(cv::Tracker::create("KCF"));
+        m_Trackers.push_back(std::make_unique<DefaultSmartTracker>());
         m_Trackers.back()->init(m_Frame, roi);
     }
 }
