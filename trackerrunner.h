@@ -1,5 +1,4 @@
-#ifndef SLTRACKER_H
-#define SLTRACKER_H
+#pragma once
 
 #include <vector>
 
@@ -9,10 +8,10 @@
 
 #include <QImage>
 
-class SLTracker
+class TrackerRunner
 {
 public:
-    SLTracker(std::unique_ptr<VideoStream> video_stream);
+    TrackerRunner(std::unique_ptr<VideoStream> video_stream);
 
 public:
     void update();
@@ -28,5 +27,3 @@ private:
     cv::Mat m_Frame;
     bool m_IsFinished;
 };
-
-#endif // SLTRACKER_H

@@ -5,7 +5,7 @@
 #include <QMouseEvent>
 #include <QTimer>
 
-#include <sltracker.h>
+#include <trackerrunner.h>
 
 #include <opencv2/opencv.hpp>
 
@@ -36,7 +36,7 @@ private:
     QImage m_Image;
 
 private:
-    std::unique_ptr<SLTracker> m_SLTracker;
+    std::unique_ptr<TrackerRunner> m_TrackerRunner;
     bool m_VideoOnStart;
     std::vector<cv::Rect2i> m_Rects;
 

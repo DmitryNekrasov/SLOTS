@@ -49,11 +49,11 @@ PlayerDialog::~PlayerDialog()
 }
 
 void PlayerDialog::mainExec() {
-    if (!m_SLTracker->isFinished()) {
-        m_SLTracker->update();
-        m_Image = m_SLTracker->getFrameAsQImage();
+    if (!m_TrackerRunner->isFinished()) {
+        m_TrackerRunner->update();
+        m_Image = m_TrackerRunner->getFrameAsQImage();
         repaintSignal();
-        ui->horizontalSlider->setSliderPosition(int(m_SLTracker->getPercentageOfVideo()));
+        ui->horizontalSlider->setSliderPosition(int(m_TrackerRunner->getPercentageOfVideo()));
     } else {
         m_Timer->stop();
         ui->playButton->setText("▶");
@@ -67,7 +67,7 @@ void PlayerDialog::on_playButton_clicked() {
 
         auto rois = convertRectsToRois();
 
-        m_SLTracker->setRois(rois);
+        m_TrackerRunner->setRois(rois);
     }
 
     if (m_Timer->isActive()) {
@@ -146,6 +146,6 @@ void PlayerDialog::on_stopButton_clicked() {
 }
 
 void PlayerDialog::refreshTracker() {
-    m_SLTracker = std::make_unique<SLTracker>(std::make_unique<VideoStreamFromImageSequence>(m_Path.toUtf8().constData()));
+    m_TrackerRunner = std::make_unique<TrackerRunner>(std::make_unique<VideoStreamFromImageSequence>(m_Path.toUtf8().constData()));
     mainExec();
 }
