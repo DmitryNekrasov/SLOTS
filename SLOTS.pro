@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     trackerrunner.cpp \
     defaultsmarttracker.cpp \
     magicsmarttracker.cpp \
-    hogfeatures.cpp
+    hogfeatures.cpp \
+    fft.cpp
 
 HEADERS  += mainwindow.h \
     videostream.h \
@@ -37,7 +38,8 @@ HEADERS  += mainwindow.h \
     defaultsmarttracker.h \
     magicsmarttracker.h \
     misc.h \
-    hogfeatures.h
+    hogfeatures.h \
+    fft.h
 
 FORMS    += mainwindow.ui \
     playerdialog.ui

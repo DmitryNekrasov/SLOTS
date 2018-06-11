@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cmath>
 
+#include "fft.h"
 #include "hogfeatures.h"
 #include "misc.h"
 
@@ -138,6 +139,5 @@ cv::Mat MagicSmartTracker::createGaussianPeak(int size_y, int size_x) {
         }
     }
 
-    //TODO: return fftd(result)
-    return result;
+    return fftd(result);
 }
