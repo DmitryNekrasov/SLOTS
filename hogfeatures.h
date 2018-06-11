@@ -12,3 +12,4 @@ typedef struct {
 void getHogFeatures(const IplImage* image, int k, HogFeatures** hogFeatures);
 void normalizeAndTruncate(HogFeatures* map, const float alfa);
 void PCAFeatureMaps(HogFeatures *map);
+void freeHogFeatures(HogFeatures** obj);

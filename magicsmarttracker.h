@@ -29,7 +29,10 @@ private:
     cv::Rect2d m_Roi;
     float m_Scale;
     cv::Size m_TemplateCvSize;
+    int m_SizePatch[3];
+    cv::Mat m_Hann;
 
 private:
     cv::Mat getFeatures(const cv::Mat& frame, bool initHanningMats, float scale_adjust = 1.0f);
+    void createHanningMats();
 };

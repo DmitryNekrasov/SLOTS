@@ -78,6 +78,45 @@ cv::Mat MagicSmartTracker::getFeatures(const cv::Mat& frame, bool initHanningMat
     getHogFeatures(&ipl, m_CellSize, &hogFeatures);
     normalizeAndTruncate(hogFeatures, 0.2f);
     PCAFeatureMaps(hogFeatures);
+    m_SizePatch[0] = hogFeatures->size_y;
+    m_SizePatch[1] = hogFeatures->size_x;
+    m_SizePatch[2] = hogFeatures->features_number;
+
+    features = cv::Mat(cv::Size(hogFeatures->features_number,hogFeatures->size_x * hogFeatures->size_y),
+                       CV_32F, hogFeatures->map);
+    features = features.t();
+
+    freeHogFeatures(&hogFeatures);
+
+    if (initHanningMats) {
+        createHanningMats();
+    }
+
+    features = m_Hann.mul(features);
+
+    cv::imshow("qwerty", features);
 
     return features;
+}
+
+void MagicSmartTracker::createHanningMats() {
+    cv::Mat hann1t = cv::Mat(cv::Size(m_SizePatch[1], 1), CV_32F, cv::Scalar(0));
+    cv::Mat hann2t = cv::Mat(cv::Size(1, m_SizePatch[0]), CV_32F, cv::Scalar(0));
+
+    for (int i = 0; i < hann1t.cols; i++) {
+        hann1t.at<float> (0, i) = 0.5 * (1 - std::cos(2 * 3.14159265358979323846 * i / (hann1t.cols - 1)));
+    }
+    for (int i = 0; i < hann2t.rows; i++) {
+        hann2t.at<float> (i, 0) = 0.5 * (1 - std::cos(2 * 3.14159265358979323846 * i / (hann2t.rows - 1)));
+    }
+
+    cv::Mat hann2d = hann2t * hann1t;
+    cv::Mat hann1d = hann2d.reshape(1, 1);
+
+    m_Hann = cv::Mat(cv::Size(m_SizePatch[0] * m_SizePatch[1], m_SizePatch[2]), CV_32F, cv::Scalar(0));
+    for (int i = 0; i < m_SizePatch[2]; i++) {
+        for (int j = 0; j < m_SizePatch[0] * m_SizePatch[1]; j++) {
+            m_Hann.at<float>(i, j) = hann1d.at<float>(0, j);
+        }
+    }
 }
