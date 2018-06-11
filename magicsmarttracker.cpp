@@ -76,6 +76,7 @@ cv::Mat MagicSmartTracker::getFeatures(const cv::Mat& frame, bool initHanningMat
     IplImage ipl = subwindow;
     HogFeatures *hogFeatures;
     getHogFeatures(&ipl, m_CellSize, &hogFeatures);
+    normalizeAndTruncate(hogFeatures, 0.2f);
 
     return features;
 }

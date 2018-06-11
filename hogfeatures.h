@@ -10,3 +10,4 @@ typedef struct {
 } HogFeatures;
 
 void getHogFeatures(const IplImage* image, int k, HogFeatures** hogFeatures);
+void normalizeAndTruncate(HogFeatures* map, const float alfa);
