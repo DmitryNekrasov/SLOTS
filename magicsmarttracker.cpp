@@ -2,6 +2,7 @@
 
 #include <cassert>
 
+#include "hogfeatures.h"
 #include "misc.h"
 
 #include <QDebug>
@@ -70,5 +71,11 @@ cv::Mat MagicSmartTracker::getFeatures(const cv::Mat& frame, bool initHanningMat
         cv::resize(subwindow, subwindow, m_TemplateCvSize);
     }
 
-    return cv::Mat(1, 1, 1, 1);
+    cv::Mat features;
+
+    IplImage ipl = subwindow;
+    HogFeatures *hogFeatures;
+    getHogFeatures(&ipl, m_CellSize, &hogFeatures);
+
+    return features;
 }
