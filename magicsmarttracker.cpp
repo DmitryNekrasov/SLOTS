@@ -1,6 +1,7 @@
 #include "magicsmarttracker.h"
 
 #include <cassert>
+#include <cmath>
 
 #include "hogfeatures.h"
 #include "misc.h"
@@ -26,7 +27,8 @@ MagicSmartTracker::MagicSmartTracker():
 void MagicSmartTracker::init(const cv::Mat& frame, const cv::Rect2d& roi) {
     m_Roi = roi;
     assert(m_Roi.width > 0 && m_Roi.height > 0);
-    getFeatures(frame, true);
+    m_Features = getFeatures(frame, true);
+    m_GausseanPeak = createGaussianPeak(m_SizePatch[0], m_SizePatch[1]);
 }
 
 void MagicSmartTracker::update(const cv::Mat& frame, cv::Rect2d& roi) {
@@ -94,8 +96,6 @@ cv::Mat MagicSmartTracker::getFeatures(const cv::Mat& frame, bool initHanningMat
 
     features = m_Hann.mul(features);
 
-    cv::imshow("qwerty", features);
-
     return features;
 }
 
@@ -119,4 +119,25 @@ void MagicSmartTracker::createHanningMats() {
             m_Hann.at<float>(i, j) = hann1d.at<float>(0, j);
         }
     }
+}
+
+cv::Mat MagicSmartTracker::createGaussianPeak(int size_y, int size_x) {
+    cv::Mat_<float> result(size_y, size_x);
+
+    int size_y_half = size_y / 2;
+    int size_x_half = size_x / 2;
+
+    float output_sigma = sqrt(float(size_x * size_y)) / float(m_Padding) * m_OutputSigmaFactor;
+    float mult = -0.5f / (output_sigma * output_sigma);
+
+    for (int i = 0; i < size_y; i++) {
+        for (int j = 0; j < size_x; j++) {
+            int first = i - size_y_half;
+            int second = j - size_x_half;
+            result(i, j) = exp(mult * float(first * first + second * second));
+        }
+    }
+
+    //TODO: return fftd(result)
+    return result;
 }
