@@ -329,3 +329,70 @@ void normalizeAndTruncate(HogFeatures* map, const float alfa) {
 
     map->map = newData;
 }
+
+void PCAFeatureMaps(HogFeatures *map) {
+    int i,j, ii, jj, k;
+    int sizeX, sizeY, p,  pp, xp, yp, pos1, pos2;
+    float * newData;
+    float val;
+    float nx, ny;
+
+    sizeX = map->size_x;
+    sizeY = map->size_y;
+    p     = map->features_number;
+    pp    = NUM_SECTOR * 3 + 4;
+    yp    = 4;
+    xp    = NUM_SECTOR;
+
+    nx    = 1.0f / sqrtf((float)(xp * 2));
+    ny    = 1.0f / sqrtf((float)(yp    ));
+
+    newData = (float *)malloc (sizeof(float) * (sizeX * sizeY * pp));
+
+    for(i = 0; i < sizeY; i++)
+    {
+        for(j = 0; j < sizeX; j++)
+        {
+            pos1 = ((i)*sizeX + j)*p;
+            pos2 = ((i)*sizeX + j)*pp;
+            k = 0;
+            for(jj = 0; jj < xp * 2; jj++)
+            {
+                val = 0;
+                for(ii = 0; ii < yp; ii++)
+                {
+                    val += map->map[pos1 + yp * xp + ii * xp * 2 + jj];
+                }/*for(ii = 0; ii < yp; ii++)*/
+                newData[pos2 + k] = val * ny;
+                k++;
+            }/*for(jj = 0; jj < xp * 2; jj++)*/
+            for(jj = 0; jj < xp; jj++)
+            {
+                val = 0;
+                for(ii = 0; ii < yp; ii++)
+                {
+                    val += map->map[pos1 + ii * xp + jj];
+                }/*for(ii = 0; ii < yp; ii++)*/
+                newData[pos2 + k] = val * ny;
+                k++;
+            }/*for(jj = 0; jj < xp; jj++)*/
+            for(ii = 0; ii < yp; ii++)
+            {
+                val = 0;
+                for(jj = 0; jj < 2 * xp; jj++)
+                {
+                    val += map->map[pos1 + yp * xp + ii * xp * 2 + jj];
+                }/*for(jj = 0; jj < xp; jj++)*/
+                newData[pos2 + k] = val * nx;
+                k++;
+            } /*for(ii = 0; ii < yp; ii++)*/
+        }/*for(j = 0; j < sizeX; j++)*/
+    }/*for(i = 0; i < sizeY; i++)*/
+//swop data
+
+    map->features_number = pp;
+
+    free (map->map);
+
+    map->map = newData;
+}
