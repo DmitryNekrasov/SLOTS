@@ -1,6 +1,7 @@
 #include "trackerrunner.h"
 
 #include "defaultsmarttracker.h"
+#include "magicsmarttracker.h"
 
 #include <QDebug>
 
@@ -43,7 +44,7 @@ double TrackerRunner::getPercentageOfVideo() {
 void TrackerRunner::setRois(std::vector<cv::Rect2d> rois) {
     m_Rois = rois;
     for (auto&& roi : rois) {
-        m_Trackers.push_back(std::make_unique<DefaultSmartTracker>());
+        m_Trackers.push_back(std::make_unique<MagicSmartTracker>());
         m_Trackers.back()->init(m_Frame, roi);
     }
 }
