@@ -34,7 +34,8 @@ HEADERS  += mainwindow.h \
     trackerrunner.h \
     smarttracker.h \
     defaultsmarttracker.h \
-    magicsmarttracker.h
+    magicsmarttracker.h \
+    misc.h
 
 FORMS    += mainwindow.ui \
     playerdialog.ui
