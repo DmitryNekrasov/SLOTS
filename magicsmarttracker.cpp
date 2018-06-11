@@ -10,7 +10,7 @@
 #include <QDebug>
 
 MagicSmartTracker::MagicSmartTracker():
-    m_Lambda(0.0001f),
+    m_Lambda(0.0001),
     m_Padding(2.5),
 //    m_OutputSigmaFactor(0.1f),
     m_InterpFactor(0.012f),
@@ -30,6 +30,8 @@ void MagicSmartTracker::init(const cv::Mat& frame, const cv::Rect2d& roi) {
     assert(m_Roi.width > 0 && m_Roi.height > 0);
     m_Features = getFeatures(frame, true);
     m_GausseanPeak = createGaussianPeak(m_SizePatch[0], m_SizePatch[1]);
+    m_AlphaMat = cv::Mat(m_SizePatch[0], m_SizePatch[1], CV_32FC2, 0.0);
+    train(m_Features, 1.0);
 }
 
 void MagicSmartTracker::update(const cv::Mat& frame, cv::Rect2d& roi) {
@@ -140,4 +142,17 @@ cv::Mat MagicSmartTracker::createGaussianPeak(int size_y, int size_x) {
     }
 
     return fftd(result);
+}
+
+void MagicSmartTracker::train(cv::Mat x, double train_interp_factor) {
+    cv::Mat gaussian_correlation_mat = gaussianCorrelation(x, x);
+    cv::Mat alpha_mat = complexDivision(m_GausseanPeak, (fftd(gaussian_correlation_mat) + m_Lambda));
+
+    m_Features = (1 - train_interp_factor) * m_Features + train_interp_factor * x;
+    m_AlphaMat = (1 - train_interp_factor) * m_AlphaMat + train_interp_factor * alpha_mat;
+}
+
+cv::Mat MagicSmartTracker::gaussianCorrelation(cv::Mat x1, cv::Mat x2) {
+    //TODO
+    return cv::Mat();
 }

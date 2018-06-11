@@ -9,3 +9,8 @@ cv::Mat fftd(cv::Mat img, bool backwards) {
 
     return img;
 }
+
+cv::Mat complexDivision(cv::Mat a, cv::Mat b) {
+    //TODO
+    return cv::Mat();
+}
