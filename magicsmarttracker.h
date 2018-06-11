@@ -14,7 +14,7 @@ public:
 
 private:
     float m_Lambda;
-    float m_Padding;
+    double m_Padding;
     float m_OutputSigmaFactor;
     float m_InterpFactor;
     float m_Sigma;
@@ -24,4 +24,12 @@ private:
     int m_TemplateSize;
     float m_ScaleStep;
     float m_ScaleWeight;
+
+private:
+    cv::Rect2d m_Roi;
+    float m_Scale;
+    cv::Size m_TemplateCvSize;
+
+private:
+    cv::Mat getFeatures(const cv::Mat& frame, bool initHanningMats, float scale_adjust = 1.0f);
 };
