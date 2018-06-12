@@ -27,6 +27,7 @@ MagicSmartTracker::MagicSmartTracker():
 
 void MagicSmartTracker::init(const cv::Mat& frame, const cv::Rect2d& roi) {
     m_Roi = roi;
+    m_FirstObject = frame(m_Roi);
     assert(m_Roi.width > 0 && m_Roi.height > 0);
     m_Features = getFeatures(frame, true);
     m_GausseanPeak = createGaussianPeak(m_SizePatch[0], m_SizePatch[1]);
@@ -35,6 +36,29 @@ void MagicSmartTracker::init(const cv::Mat& frame, const cv::Rect2d& roi) {
 }
 
 void MagicSmartTracker::update(const cv::Mat& frame, cv::Rect2d& roi) {
+    //-----
+
+    cv::Mat putImage = frame(roi);
+    m_SmartQueue.put(putImage.clone());
+    cv::imshow("put", putImage);
+    if (m_SmartQueue.isFull()) {
+        cv::Mat getImage = m_SmartQueue.get();
+        cv::imshow("get", getImage);
+    }
+
+//    cv::Mat result;
+//    cv::matchTemplate(frame, m_FirstObject, result, cv::TM_CCOEFF_NORMED);
+//    cv::imshow("result", result);
+
+//    cv::Mat q = result >= 0.6;
+//    cv::imshow("q", q);
+
+//    double min, max;
+//    cv::minMaxLoc(result, &min, &max);
+//    qDebug() << max << "\n";
+
+    //-----
+
     if (m_Roi.x + m_Roi.width <= 0) {
         m_Roi.x = -m_Roi.width + 1;
     }

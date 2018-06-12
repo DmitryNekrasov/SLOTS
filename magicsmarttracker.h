@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include "smarttracker.h"
 
 class MagicSmartTracker : public SmartTracker
@@ -11,6 +13,37 @@ public:
 
     virtual void init(const cv::Mat& frame, const cv::Rect2d& roi) override;
     virtual void update(const cv::Mat& frame, cv::Rect2d& roi) override;
+
+private:
+    class SmartQueue
+    {
+    private:
+        static constexpr size_t N = 25;
+        std::array<cv::Mat, N> mats;
+        size_t index;
+        size_t counter;
+    public:
+        SmartQueue() :
+            index(0),
+            counter(0)
+        {}
+
+        void put(cv::Mat mat) {
+            mats[index] = mat;
+            index = (index + 1) % N;
+            if (counter < N) {
+                counter++;
+            }
+        }
+
+        cv::Mat get() {
+            return mats[(index + 1) % N];
+        }
+
+        bool isFull() {
+            return counter == N;
+        }
+    };
 
 private:
     double m_Lambda;
@@ -32,6 +65,9 @@ private:
     cv::Mat m_Features;
     cv::Mat m_GausseanPeak;
     cv::Mat m_AlphaMat;
+
+    cv::Mat m_FirstObject;
+    SmartQueue m_SmartQueue;
 
 private:
     cv::Mat getFeatures(const cv::Mat& frame, bool initHanningMats, float scale_adjust = 1.0f);
