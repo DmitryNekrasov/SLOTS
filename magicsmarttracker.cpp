@@ -12,7 +12,7 @@
 MagicSmartTracker::MagicSmartTracker():
     m_Lambda(0.0001),
     m_Padding(2.5),
-//    m_OutputSigmaFactor(0.1f),
+    m_OutputSigmaFactor(0.125f),
     m_InterpFactor(0.012f),
     m_Sigma(0.6),
     m_CellSize(4),
@@ -35,21 +35,21 @@ void MagicSmartTracker::init(const cv::Mat& frame, const cv::Rect2d& roi) {
 }
 
 void MagicSmartTracker::update(const cv::Mat& frame, cv::Rect2d& roi) {
-    if (roi.x + roi.width <= 0) {
-        roi.x = -roi.width + 1;
+    if (m_Roi.x + m_Roi.width <= 0) {
+        m_Roi.x = -m_Roi.width + 1;
     }
-    if (roi.y + roi.height <= 0) {
-        roi.y = -roi.height + 1;
+    if (m_Roi.y + m_Roi.height <= 0) {
+        m_Roi.y = -m_Roi.height + 1;
     }
-    if (roi.x >= frame.cols - 1) {
-        roi.x = frame.cols - 2;
+    if (m_Roi.x >= frame.cols - 1) {
+        m_Roi.x = frame.cols - 2;
     }
-    if (roi.y >= frame.rows - 1) {
-        roi.y = frame.rows - 2;
+    if (m_Roi.y >= frame.rows - 1) {
+        m_Roi.y = frame.rows - 2;
     }
 
-    double cx = roi.x + roi.width / 2.0;
-    double cy = roi.y + roi.height / 2.0;
+    double cx = m_Roi.x + m_Roi.width / 2.0;
+    double cy = m_Roi.y + m_Roi.height / 2.0;
 
     float peak_value;
     cv::Point2f res = detect(m_Features, getFeatures(frame, 0, 1.0f), peak_value);
@@ -62,8 +62,8 @@ void MagicSmartTracker::update(const cv::Mat& frame, cv::Rect2d& roi) {
             res = new_res;
             peak_value = new_peak_value;
             m_Scale /= m_ScaleStep;
-            roi.width /= m_ScaleStep;
-            roi.height /= m_ScaleStep;
+            m_Roi.width /= m_ScaleStep;
+            m_Roi.height /= m_ScaleStep;
         }
 
         new_res = detect(m_Features, getFeatures(frame, 0, m_ScaleStep), new_peak_value);
@@ -72,30 +72,31 @@ void MagicSmartTracker::update(const cv::Mat& frame, cv::Rect2d& roi) {
             res = new_res;
             peak_value = new_peak_value;
             m_Scale *= m_ScaleStep;
-            roi.width *= m_ScaleStep;
-            roi.height *= m_ScaleStep;
+            m_Roi.width *= m_ScaleStep;
+            m_Roi.height *= m_ScaleStep;
         }
     }
 
-    roi.x = cx - roi.width / 2.0f + ((float) res.x * m_CellSize * m_Scale);
-    roi.y = cy - roi.height / 2.0f + ((float) res.y * m_CellSize * m_Scale);
+    m_Roi.x = cx - m_Roi.width / 2.0f + ((float) res.x * m_CellSize * m_Scale);
+    m_Roi.y = cy - m_Roi.height / 2.0f + ((float) res.y * m_CellSize * m_Scale);
 
-    if (roi.x >= frame.cols - 1) {
-        roi.x = frame.cols - 1;
+    if (m_Roi.x >= frame.cols - 1) {
+        m_Roi.x = frame.cols - 1;
     }
-    if (roi.y >= frame.rows - 1) {
-        roi.y = frame.rows - 1;
+    if (m_Roi.y >= frame.rows - 1) {
+        m_Roi.y = frame.rows - 1;
     }
-    if (roi.x + roi.width <= 0) {
-        roi.x = -roi.width + 2;
+    if (m_Roi.x + m_Roi.width <= 0) {
+        m_Roi.x = -m_Roi.width + 2;
     }
-    if (roi.y + roi.height <= 0) {
-        roi.y = -roi.height + 2;
+    if (m_Roi.y + m_Roi.height <= 0) {
+        m_Roi.y = -m_Roi.height + 2;
     }
 
-    assert(roi.width >= 0 && roi.height >= 0);
+    assert(m_Roi.width >= 0 && m_Roi.height >= 0);
     cv::Mat x = getFeatures(frame, 0);
     train(x, m_InterpFactor);
+    roi = m_Roi;
 }
 
 cv::Mat MagicSmartTracker::getFeatures(const cv::Mat& frame, bool initHanningMats, float scale_adjust) {

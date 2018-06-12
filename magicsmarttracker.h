@@ -19,8 +19,8 @@ private:
     float m_InterpFactor;
     double m_Sigma;
     int m_CellSize;
-    cv::Mat m_LabCentroids;
-    int m_CellSizeSqr;
+//    cv::Mat m_LabCentroids;
+//    int m_CellSizeSqr;
     int m_TemplateSize;
     float m_ScaleStep;
     float m_ScaleWeight;
