@@ -239,9 +239,29 @@ cv::Mat MagicSmartTracker::gaussianCorrelation(cv::Mat x1, cv::Mat x2) {
     return k;
 }
 
-cv::Point2f MagicSmartTracker::detect(cv::Mat z, cv::Mat x, float &peak_value) {
-    //TODO
-    return cv::Point2f(0, 0);
+cv::Point2f MagicSmartTracker::detect(cv::Mat z, cv::Mat x, float& peak_value) {
+    cv::Mat k = gaussianCorrelation(x, z);
+    cv::Mat res = (real(fftd(complexMultiplication(m_AlphaMat, fftd(k)), true)));
+
+    cv::Point2i pi;
+    double pv;
+    cv::minMaxLoc(res, NULL, &pv, NULL, &pi);
+    peak_value = (float) pv;
+
+    cv::Point2f p((float)pi.x, (float)pi.y);
+
+    if (pi.x > 0 && pi.x < res.cols-1) {
+        p.x += subPixelPeak(res.at<float>(pi.y, pi.x-1), peak_value, res.at<float>(pi.y, pi.x+1));
+    }
+
+    if (pi.y > 0 && pi.y < res.rows-1) {
+        p.y += subPixelPeak(res.at<float>(pi.y-1, pi.x), peak_value, res.at<float>(pi.y+1, pi.x));
+    }
+
+    p.x -= (res.cols) / 2;
+    p.y -= (res.rows) / 2;
+
+    return p;
 }
 
 float MagicSmartTracker::subPixelPeak(float left, float center, float right) {
