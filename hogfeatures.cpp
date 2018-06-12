@@ -218,8 +218,6 @@ void getHogFeatures(const IplImage* image, int k, HogFeatures** hogFeatures) {
 
     free(r);
     free(alfa);
-
-    qDebug() << "Correct!" << "\n";
 }
 
 void normalizeAndTruncate(HogFeatures* map, const float alfa) {
