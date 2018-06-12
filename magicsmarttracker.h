@@ -17,7 +17,7 @@ private:
     double m_Padding;
     float m_OutputSigmaFactor;
     float m_InterpFactor;
-    float m_Sigma;
+    double m_Sigma;
     int m_CellSize;
     cv::Mat m_LabCentroids;
     int m_CellSizeSqr;

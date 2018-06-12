@@ -14,7 +14,7 @@ MagicSmartTracker::MagicSmartTracker():
     m_Padding(2.5),
 //    m_OutputSigmaFactor(0.1f),
     m_InterpFactor(0.012f),
-    m_Sigma(0.6f),
+    m_Sigma(0.6),
     m_CellSize(4),
 //    m_LabCentroids(g_ClustersNumber, 3, CV_32FC1, &g_Data),
     m_TemplateSize(96),
@@ -153,6 +153,28 @@ void MagicSmartTracker::train(cv::Mat x, double train_interp_factor) {
 }
 
 cv::Mat MagicSmartTracker::gaussianCorrelation(cv::Mat x1, cv::Mat x2) {
-    //TODO
-    return cv::Mat();
+    cv::Mat c = cv::Mat(cv::Size(m_SizePatch[1], m_SizePatch[0]), CV_32F, cv::Scalar(0));
+
+    cv::Mat caux;
+    cv::Mat x1aux;
+    cv::Mat x2aux;
+
+    for (int i = 0; i < m_SizePatch[2]; i++) {
+        x1aux = x1.row(i);
+        x1aux = x1aux.reshape(1, m_SizePatch[0]);
+        x2aux = x2.row(i).reshape(1, m_SizePatch[0]);
+        cv::mulSpectrums(fftd(x1aux), fftd(x2aux), caux, 0, true);
+        caux = fftd(caux, true);
+        rearrange(caux);
+        caux.convertTo(caux,CV_32F);
+        c = c + real(caux);
+    }
+
+    cv::Mat d;
+    cv::max(((cv::sum(x1.mul(x1))[0] + cv::sum(x2.mul(x2))[0]) - 2.0 * c) /
+            (m_SizePatch[0] * m_SizePatch[1] * m_SizePatch[2]), 0, d);
+
+    cv::Mat k;
+    cv::exp((-d / (m_Sigma * m_Sigma)), k);
+    return k;
 }
