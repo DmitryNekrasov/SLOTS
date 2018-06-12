@@ -42,4 +42,5 @@ private:
     void train(cv::Mat x, double train_interp_factor);
     cv::Mat gaussianCorrelation(cv::Mat x1, cv::Mat x2);
     cv::Point2f detect(cv::Mat z, cv::Mat x, float &peak_value);
+    float subPixelPeak(float left, float center, float right);
 };

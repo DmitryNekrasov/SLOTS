@@ -243,3 +243,12 @@ cv::Point2f MagicSmartTracker::detect(cv::Mat z, cv::Mat x, float &peak_value) {
     //TODO
     return cv::Point2f(0, 0);
 }
+
+float MagicSmartTracker::subPixelPeak(float left, float center, float right) {
+    float divisor = 2 * center - right - left;
+
+    if (divisor == 0)
+        return 0;
+
+    return 0.5 * (right - left) / divisor;
+}
