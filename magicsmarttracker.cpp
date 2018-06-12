@@ -16,14 +16,11 @@ MagicSmartTracker::MagicSmartTracker():
     m_InterpFactor(0.012f),
     m_Sigma(0.6),
     m_CellSize(4),
-//    m_LabCentroids(g_ClustersNumber, 3, CV_32FC1, &g_Data),
     m_TemplateSize(96),
     m_ScaleStep(1.05f),
     m_ScaleWeight(0.95f)
 
-{
-//    m_CellSizeSqr = m_CellSize * m_CellSize;
-}
+{}
 
 void MagicSmartTracker::init(const cv::Mat& frame, const cv::Rect2d& roi) {
     m_Roi = roi;
