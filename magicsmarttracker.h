@@ -18,10 +18,11 @@ private:
     class SmartQueue
     {
     private:
-        static constexpr size_t N = 25;
+        static constexpr size_t N = 10;
         std::array<cv::Mat, N> mats;
         size_t index;
         size_t counter;
+
     public:
         SmartQueue() :
             index(0),

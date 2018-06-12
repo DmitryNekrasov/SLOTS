@@ -38,24 +38,24 @@ void MagicSmartTracker::init(const cv::Mat& frame, const cv::Rect2d& roi) {
 void MagicSmartTracker::update(const cv::Mat& frame, cv::Rect2d& roi) {
     //-----
 
-    cv::Mat putImage = frame(roi);
-    m_SmartQueue.put(putImage.clone());
-    cv::imshow("put", putImage);
-    if (m_SmartQueue.isFull()) {
-        cv::Mat getImage = m_SmartQueue.get();
-        cv::imshow("get", getImage);
-    }
+//    cv::Mat putImage = frame(roi);
+//    m_SmartQueue.put(putImage.clone());
+//    cv::imshow("put", putImage);
+//    if (m_SmartQueue.isFull()) {
+//        cv::Mat getImage = m_SmartQueue.get();
+//        cv::imshow("get", getImage);
 
-//    cv::Mat result;
-//    cv::matchTemplate(frame, m_FirstObject, result, cv::TM_CCOEFF_NORMED);
-//    cv::imshow("result", result);
+//        cv::Mat result;
+//        cv::matchTemplate(frame, getImage, result, cv::TM_CCOEFF_NORMED);
+//        cv::imshow("result", result);
 
-//    cv::Mat q = result >= 0.6;
-//    cv::imshow("q", q);
+//        cv::Mat q = result >= 0.6;
+//        cv::imshow("q", q);
 
-//    double min, max;
-//    cv::minMaxLoc(result, &min, &max);
-//    qDebug() << max << "\n";
+//        double min, max;
+//        cv::minMaxLoc(result, &min, &max);
+//        qDebug() << max << "\n";
+//    }
 
     //-----
 
