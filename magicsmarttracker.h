@@ -16,11 +16,11 @@ private:
     double m_Lambda;
     double m_Padding;
     float m_OutputSigmaFactor;
-    float m_InterpFactor;
+    double m_InterpFactor;
     double m_Sigma;
     int m_CellSize;
     int m_TemplateSize;
-    float m_ScaleStep;
+    double m_ScaleStep;
     float m_ScaleWeight;
 
 private:

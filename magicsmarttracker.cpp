@@ -9,15 +9,18 @@
 
 #include <QDebug>
 
+static constexpr double g_Eps = 0.00000000000000000001;
+static constexpr double g_Pi = 3.14159265358979323846;
+
 MagicSmartTracker::MagicSmartTracker():
     m_Lambda(0.0001),
     m_Padding(2.5),
     m_OutputSigmaFactor(0.125f),
-    m_InterpFactor(0.012f),
+    m_InterpFactor(0.012),
     m_Sigma(0.6),
     m_CellSize(4),
     m_TemplateSize(96),
-    m_ScaleStep(1.05f),
+    m_ScaleStep(1.05),
     m_ScaleWeight(0.95f)
 
 {}
@@ -51,9 +54,9 @@ void MagicSmartTracker::update(const cv::Mat& frame, cv::Rect2d& roi) {
     float peak_value;
     cv::Point2f res = detect(m_Features, getFeatures(frame, 0, 1.0f), peak_value);
 
-    if (m_ScaleStep != 1) {
+    if (fabs(m_ScaleStep - 1.0) < g_Eps) {
         float new_peak_value;
-        cv::Point2f new_res = detect(m_Features, getFeatures(frame, 0, 1.0f / m_ScaleStep), new_peak_value);
+        cv::Point2f new_res = detect(m_Features, getFeatures(frame, 0, 1.0f / float(m_ScaleStep)), new_peak_value);
 
         if (m_ScaleWeight * new_peak_value > peak_value) {
             res = new_res;
@@ -63,7 +66,7 @@ void MagicSmartTracker::update(const cv::Mat& frame, cv::Rect2d& roi) {
             m_Roi.height /= m_ScaleStep;
         }
 
-        new_res = detect(m_Features, getFeatures(frame, 0, m_ScaleStep), new_peak_value);
+        new_res = detect(m_Features, getFeatures(frame, 0, float(m_ScaleStep)), new_peak_value);
 
         if (m_ScaleWeight * new_peak_value > peak_value) {
             res = new_res;
@@ -74,8 +77,8 @@ void MagicSmartTracker::update(const cv::Mat& frame, cv::Rect2d& roi) {
         }
     }
 
-    m_Roi.x = cx - m_Roi.width / 2.0f + ((float) res.x * m_CellSize * m_Scale);
-    m_Roi.y = cy - m_Roi.height / 2.0f + ((float) res.y * m_CellSize * m_Scale);
+    m_Roi.x = cx - m_Roi.width / 2.0 + double(res.x * m_CellSize * m_Scale);
+    m_Roi.y = cy - m_Roi.height / 2.0 + double(res.y * m_CellSize * m_Scale);
 
     if (m_Roi.x >= frame.cols - 1) {
         m_Roi.x = frame.cols - 1;
@@ -165,10 +168,10 @@ void MagicSmartTracker::createHanningMats() {
     cv::Mat hann2t = cv::Mat(cv::Size(1, m_SizePatch[0]), CV_32F, cv::Scalar(0));
 
     for (int i = 0; i < hann1t.cols; i++) {
-        hann1t.at<float> (0, i) = 0.5 * (1 - std::cos(2 * 3.14159265358979323846 * i / (hann1t.cols - 1)));
+        hann1t.at<float> (0, i) = 0.5f * float(1 - std::cos(2 * g_Pi * i / (hann1t.cols - 1)));
     }
     for (int i = 0; i < hann2t.rows; i++) {
-        hann2t.at<float> (i, 0) = 0.5 * (1 - std::cos(2 * 3.14159265358979323846 * i / (hann2t.rows - 1)));
+        hann2t.at<float> (i, 0) = 0.5f * float(1 - std::cos(2 * g_Pi * i / (hann2t.rows - 1)));
     }
 
     cv::Mat hann2d = hann2t * hann1t;
@@ -244,9 +247,9 @@ cv::Point2f MagicSmartTracker::detect(cv::Mat z, cv::Mat x, float& peak_value) {
     cv::Point2i pi;
     double pv;
     cv::minMaxLoc(res, NULL, &pv, NULL, &pi);
-    peak_value = (float) pv;
+    peak_value = float(pv);
 
-    cv::Point2f p((float)pi.x, (float)pi.y);
+    cv::Point2f p(float(pi.x), float(pi.y));
 
     if (pi.x > 0 && pi.x < res.cols-1) {
         p.x += subPixelPeak(res.at<float>(pi.y, pi.x-1), peak_value, res.at<float>(pi.y, pi.x+1));
@@ -265,8 +268,9 @@ cv::Point2f MagicSmartTracker::detect(cv::Mat z, cv::Mat x, float& peak_value) {
 float MagicSmartTracker::subPixelPeak(float left, float center, float right) {
     float divisor = 2 * center - right - left;
 
-    if (divisor == 0)
+    if (fabs(double(divisor)) < g_Eps) {
         return 0;
+    }
 
-    return 0.5 * (right - left) / divisor;
+    return 0.5f * (right - left) / divisor;
 }
