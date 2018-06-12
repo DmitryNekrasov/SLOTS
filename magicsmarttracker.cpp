@@ -54,27 +54,25 @@ void MagicSmartTracker::update(const cv::Mat& frame, cv::Rect2d& roi) {
     float peak_value;
     cv::Point2f res = detect(m_Features, getFeatures(frame, 0, 1.0f), peak_value);
 
-    if (fabs(m_ScaleStep - 1.0) < g_Eps) {
-        float new_peak_value;
-        cv::Point2f new_res = detect(m_Features, getFeatures(frame, 0, 1.0f / float(m_ScaleStep)), new_peak_value);
+    float new_peak_value;
+    cv::Point2f new_res = detect(m_Features, getFeatures(frame, 0, 1.0f / float(m_ScaleStep)), new_peak_value);
 
-        if (m_ScaleWeight * new_peak_value > peak_value) {
-            res = new_res;
-            peak_value = new_peak_value;
-            m_Scale /= m_ScaleStep;
-            m_Roi.width /= m_ScaleStep;
-            m_Roi.height /= m_ScaleStep;
-        }
+    if (m_ScaleWeight * new_peak_value > peak_value) {
+        res = new_res;
+        peak_value = new_peak_value;
+        m_Scale /= m_ScaleStep;
+        m_Roi.width /= m_ScaleStep;
+        m_Roi.height /= m_ScaleStep;
+    }
 
-        new_res = detect(m_Features, getFeatures(frame, 0, float(m_ScaleStep)), new_peak_value);
+    new_res = detect(m_Features, getFeatures(frame, 0, float(m_ScaleStep)), new_peak_value);
 
-        if (m_ScaleWeight * new_peak_value > peak_value) {
-            res = new_res;
-            peak_value = new_peak_value;
-            m_Scale *= m_ScaleStep;
-            m_Roi.width *= m_ScaleStep;
-            m_Roi.height *= m_ScaleStep;
-        }
+    if (m_ScaleWeight * new_peak_value > peak_value) {
+        res = new_res;
+        peak_value = new_peak_value;
+        m_Scale *= m_ScaleStep;
+        m_Roi.width *= m_ScaleStep;
+        m_Roi.height *= m_ScaleStep;
     }
 
     m_Roi.x = cx - m_Roi.width / 2.0 + double(res.x * m_CellSize * m_Scale);
