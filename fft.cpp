@@ -53,3 +53,19 @@ cv::Mat real(cv::Mat img) {
     cv::split(img, planes);
     return planes[0];
 }
+
+cv::Mat complexMultiplication(cv::Mat a, cv::Mat b) {
+    std::vector<cv::Mat> pa;
+    std::vector<cv::Mat> pb;
+    cv::split(a, pa);
+    cv::split(b, pb);
+
+    std::vector<cv::Mat> pres;
+    pres.push_back(pa[0].mul(pb[0]) - pa[1].mul(pb[1]));
+    pres.push_back(pa[0].mul(pb[1]) + pa[1].mul(pb[0]));
+
+    cv::Mat res;
+    cv::merge(pres, res);
+
+    return res;
+}
