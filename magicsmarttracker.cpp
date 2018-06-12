@@ -35,7 +35,67 @@ void MagicSmartTracker::init(const cv::Mat& frame, const cv::Rect2d& roi) {
 }
 
 void MagicSmartTracker::update(const cv::Mat& frame, cv::Rect2d& roi) {
+    if (roi.x + roi.width <= 0) {
+        roi.x = -roi.width + 1;
+    }
+    if (roi.y + roi.height <= 0) {
+        roi.y = -roi.height + 1;
+    }
+    if (roi.x >= frame.cols - 1) {
+        roi.x = frame.cols - 2;
+    }
+    if (roi.y >= frame.rows - 1) {
+        roi.y = frame.rows - 2;
+    }
 
+    double cx = roi.x + roi.width / 2.0;
+    double cy = roi.y + roi.height / 2.0;
+
+    float peak_value;
+    cv::Point2f res = detect(m_Features, getFeatures(frame, 0, 1.0f), peak_value);
+
+    if (m_ScaleStep != 1) {
+        float new_peak_value;
+        cv::Point2f new_res = detect(m_Features, getFeatures(frame, 0, 1.0f / m_ScaleStep), new_peak_value);
+
+        if (m_ScaleWeight * new_peak_value > peak_value) {
+            res = new_res;
+            peak_value = new_peak_value;
+            m_Scale /= m_ScaleStep;
+            roi.width /= m_ScaleStep;
+            roi.height /= m_ScaleStep;
+        }
+
+        new_res = detect(m_Features, getFeatures(frame, 0, m_ScaleStep), new_peak_value);
+
+        if (m_ScaleWeight * new_peak_value > peak_value) {
+            res = new_res;
+            peak_value = new_peak_value;
+            m_Scale *= m_ScaleStep;
+            roi.width *= m_ScaleStep;
+            roi.height *= m_ScaleStep;
+        }
+    }
+
+    roi.x = cx - roi.width / 2.0f + ((float) res.x * m_CellSize * m_Scale);
+    roi.y = cy - roi.height / 2.0f + ((float) res.y * m_CellSize * m_Scale);
+
+    if (roi.x >= frame.cols - 1) {
+        roi.x = frame.cols - 1;
+    }
+    if (roi.y >= frame.rows - 1) {
+        roi.y = frame.rows - 1;
+    }
+    if (roi.x + roi.width <= 0) {
+        roi.x = -roi.width + 2;
+    }
+    if (roi.y + roi.height <= 0) {
+        roi.y = -roi.height + 2;
+    }
+
+    assert(roi.width >= 0 && roi.height >= 0);
+    cv::Mat x = getFeatures(frame, 0);
+    train(x, m_InterpFactor);
 }
 
 cv::Mat MagicSmartTracker::getFeatures(const cv::Mat& frame, bool initHanningMats, float scale_adjust) {
@@ -177,4 +237,9 @@ cv::Mat MagicSmartTracker::gaussianCorrelation(cv::Mat x1, cv::Mat x2) {
     cv::Mat k;
     cv::exp((-d / (m_Sigma * m_Sigma)), k);
     return k;
+}
+
+cv::Point2f MagicSmartTracker::detect(cv::Mat z, cv::Mat x, float &peak_value) {
+    //TODO
+    return cv::Point2f(0, 0);
 }

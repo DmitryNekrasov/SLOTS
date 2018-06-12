@@ -41,4 +41,5 @@ private:
     cv::Mat createGaussianPeak(int size_y, int size_x);
     void train(cv::Mat x, double train_interp_factor);
     cv::Mat gaussianCorrelation(cv::Mat x1, cv::Mat x2);
+    cv::Point2f detect(cv::Mat z, cv::Mat x, float &peak_value);
 };
