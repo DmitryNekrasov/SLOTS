@@ -10,8 +10,7 @@
 
 static const int START_VIDEO_GAP_X = 144;
 static const int START_VIDEO_GAP_Y = 23;
-static const int SLIDER_RIGHT_GAP = 5;
-static const int BORDER = 5;
+static const int BORDER = 3;
 
 static bool g_IsPressed = false;
 
