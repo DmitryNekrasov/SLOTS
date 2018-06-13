@@ -34,8 +34,8 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>51</width>
-     <height>51</height>
+     <width>61</width>
+     <height>61</height>
     </rect>
    </property>
    <property name="text">
@@ -48,7 +48,7 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>143</x>
      <y>0</y>
      <width>291</width>
      <height>21</height>
@@ -61,48 +61,43 @@
   <widget class="QPushButton" name="stopButton">
    <property name="geometry">
     <rect>
-     <x>65</x>
+     <x>75</x>
      <y>10</y>
-     <width>51</width>
-     <height>51</height>
+     <width>61</width>
+     <height>61</height>
     </rect>
    </property>
    <property name="text">
     <string>■</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QComboBox" name="comboBox">
    <property name="geometry">
     <rect>
-     <x>127</x>
-     <y>23</y>
-     <width>1440</width>
-     <height>900</height>
+     <x>10</x>
+     <y>80</y>
+     <width>131</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>120</y>
+     <width>131</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>TextLabel</string>
+    <string>Инвариантность
+к масштабу</string>
    </property>
   </widget>
  </widget>
  <resources/>
  <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>PlayerDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
@@ -115,6 +110,22 @@
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>PlayerDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
      <y>274</y>
     </hint>
    </hints>

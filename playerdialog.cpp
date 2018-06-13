@@ -8,7 +8,7 @@
 
 #include <videostreamfromimagesequence.h>
 
-static const int START_VIDEO_GAP_X = 127;
+static const int START_VIDEO_GAP_X = 144;
 static const int START_VIDEO_GAP_Y = 23;
 static const int SLIDER_RIGHT_GAP = 5;
 
@@ -38,6 +38,10 @@ PlayerDialog::PlayerDialog(QString path, QWidget *parent) :
 
     setFixedWidth(START_VIDEO_GAP_X + m_Image.width());
     ui->horizontalSlider->setMinimumWidth(m_Image.width() - SLIDER_RIGHT_GAP);
+
+    ui->comboBox->addItem("My KCF");
+    ui->comboBox->addItem("OpenCV KCF");
+    ui->comboBox->addItem("OpenCV TLD");
 
     m_Timer = new QTimer();
     connect(m_Timer, SIGNAL(timeout()), this, SLOT(mainExec()));
