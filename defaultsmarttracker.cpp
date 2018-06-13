@@ -1,7 +1,7 @@
 #include "defaultsmarttracker.h"
 
-DefaultSmartTracker::DefaultSmartTracker() :
-    m_Tracker(cv::Tracker::create("KCF"))
+DefaultSmartTracker::DefaultSmartTracker(std::string algorithm_name) :
+    m_Tracker(cv::Tracker::create(algorithm_name))
 {}
 
 void DefaultSmartTracker::init(const cv::Mat& frame, const cv::Rect2d& roi) {

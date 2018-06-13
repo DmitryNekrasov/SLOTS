@@ -2,12 +2,14 @@
 
 #include "smarttracker.h"
 
+#include <string>
+
 #include <opencv2/tracking/tracking.hpp>
 
 class DefaultSmartTracker : public SmartTracker
 {
 public:
-    DefaultSmartTracker();
+    DefaultSmartTracker(std::string algorithm_name);
 
     virtual ~DefaultSmartTracker() = default;
 

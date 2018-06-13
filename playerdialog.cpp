@@ -71,7 +71,9 @@ void PlayerDialog::on_playButton_clicked() {
 
         auto rois = convertRectsToRois();
 
-        m_TrackerRunner->setRois(rois);
+        auto comboBoxIndex = ui->comboBox->currentIndex();
+
+        m_TrackerRunner->setRois(rois, comboBoxIndex);
     }
 
     if (m_Timer->isActive()) {

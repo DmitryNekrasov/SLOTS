@@ -18,7 +18,7 @@ public:
     QImage getFrameAsQImage();
     bool isFinished();
     double getPercentageOfVideo();
-    void setRois(std::vector<cv::Rect2d> rois);
+    void setRois(std::vector<cv::Rect2d> rois, int tracker_type);
 
 private:
     std::unique_ptr<VideoStream> m_VideoStream;
