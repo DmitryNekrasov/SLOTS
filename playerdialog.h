@@ -54,6 +54,7 @@ private slots:
     void mainExec();
     void on_playButton_clicked();
     void on_stopButton_clicked();
+    void on_comboBox_currentIndexChanged(int index);
 };
 
 #endif // PLAYERDIALOG_H

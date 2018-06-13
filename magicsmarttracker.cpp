@@ -12,7 +12,7 @@
 static constexpr double g_Eps = 0.00000000000000000001;
 static constexpr double g_Pi = 3.14159265358979323846;
 
-MagicSmartTracker::MagicSmartTracker():
+MagicSmartTracker::MagicSmartTracker(bool scale_invariance):
     m_Lambda(0.0001),
     m_Padding(2.5),
     m_OutputSigmaFactor(0.125f),
@@ -20,7 +20,7 @@ MagicSmartTracker::MagicSmartTracker():
     m_Sigma(0.6),
     m_CellSize(4),
     m_TemplateSize(96),
-    m_ScaleStep(1.05),
+    m_ScaleStep(scale_invariance ? 1.05 : 1.00),
     m_ScaleWeight(0.95f)
 
 {}

@@ -7,7 +7,7 @@
 class MagicSmartTracker : public SmartTracker
 {
 public:
-    MagicSmartTracker();
+    MagicSmartTracker(bool scale_invariance);
 
     virtual ~MagicSmartTracker() = default;
 

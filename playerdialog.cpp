@@ -68,12 +68,10 @@ void PlayerDialog::mainExec() {
 void PlayerDialog::on_playButton_clicked() {
     if (m_VideoOnStart) {
         m_VideoOnStart = false;
-
         auto rois = convertRectsToRois();
-
-        auto comboBoxIndex = ui->comboBox->currentIndex();
-
-        m_TrackerRunner->setRois(rois, comboBoxIndex);
+        auto combo_box_index = ui->comboBox->currentIndex();
+        auto scale_invariance = ui->checkBox->isChecked();
+        m_TrackerRunner->setParams(rois, combo_box_index, scale_invariance);
     }
 
     if (m_Timer->isActive()) {
@@ -154,4 +152,10 @@ void PlayerDialog::on_stopButton_clicked() {
 void PlayerDialog::refreshTracker() {
     m_TrackerRunner = std::make_unique<TrackerRunner>(std::make_unique<VideoStreamFromImageSequence>(m_Path.toUtf8().constData()));
     mainExec();
+}
+
+void PlayerDialog::on_comboBox_currentIndexChanged(int index) {
+    bool isMyKcf = index == 0;
+    ui->checkBox->setChecked(isMyKcf);
+    ui->checkBox->setEnabled(isMyKcf);
 }

@@ -41,12 +41,12 @@ double TrackerRunner::getPercentageOfVideo() {
     return m_VideoStream->getPercentageOfVideo();
 }
 
-void TrackerRunner::setRois(std::vector<cv::Rect2d> rois, int tracker_type) {
+void TrackerRunner::setParams(std::vector<cv::Rect2d> rois, int tracker_type, bool scale_invariance) {
     m_Rois = rois;
     for (auto&& roi : rois) {
         switch (tracker_type) {
             case 0:
-                m_Trackers.push_back(std::make_unique<MagicSmartTracker>());
+                m_Trackers.push_back(std::make_unique<MagicSmartTracker>(scale_invariance));
                 break;
             case 1:
                 m_Trackers.push_back(std::make_unique<DefaultSmartTracker>("KCF"));
