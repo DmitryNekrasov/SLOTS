@@ -11,6 +11,7 @@
 static const int START_VIDEO_GAP_X = 144;
 static const int START_VIDEO_GAP_Y = 23;
 static const int SLIDER_RIGHT_GAP = 5;
+static const int BORDER = 5;
 
 static bool g_IsPressed = false;
 
@@ -36,8 +37,9 @@ PlayerDialog::PlayerDialog(QString path, QWidget *parent) :
 
     refreshTracker();
 
-    setFixedWidth(START_VIDEO_GAP_X + m_Image.width());
-    ui->horizontalSlider->setMinimumWidth(m_Image.width() - SLIDER_RIGHT_GAP);
+    setFixedWidth(START_VIDEO_GAP_X + m_Image.width() + BORDER);
+    setFixedHeight(START_VIDEO_GAP_Y + m_Image.height() + BORDER);
+    ui->horizontalSlider->setMinimumWidth(m_Image.width());
 
     ui->comboBox->addItem("My KCF");
     ui->comboBox->addItem("OpenCV KCF");
